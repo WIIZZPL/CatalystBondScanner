@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS bonds;
+DROP TABLE IF EXISTS issuers;
+DROP TABLE IF EXISTS last_modified;
