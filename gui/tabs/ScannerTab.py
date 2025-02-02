@@ -2,8 +2,6 @@ import  ttkbootstrap as ttk
 from PIL.ImageTk import PhotoImage
 from pytablericons import TablerIcons, OutlineIcon
 
-from scraper.BondScraper import BondScraper
-
 class ScannerTab(ttk.Frame):
 
     def __init__(self, *args, **kwargs):

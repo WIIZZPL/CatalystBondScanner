@@ -11,7 +11,7 @@ from PIL.ImageTk import PhotoImage
 from pytablericons import TablerIcons, OutlineIcon
 
 from db_access import DatabaseHandler
-from scraper.BondScraper import BondScraper
+from scraper.CombinedScraper import CombinedScraper
 
 
 class SyncTab(ttk.Frame):
@@ -81,7 +81,7 @@ class SyncTab(ttk.Frame):
         #scraper
         self.scraper_thread: Thread = None
         self.scraper_thread_exit_event = Event()
-        self.scraper: BondScraper = BondScraper()
+        self.scraper = CombinedScraper(self.scraper_thread_exit_event)
         self.scraper.set_database_handler(self.master.master.get_database_handler())
 
     def on_tab_show(self):
@@ -106,6 +106,7 @@ class SyncTab(ttk.Frame):
         if self.sync_button['text'] == 'Synchronizuj':
             self.sync_start()
         elif self.sync_button['text'] == 'Zatrzymaj':
+            logging.debug('Synch stop button pressed')
             self.sync_stop()
 
     def thread_finished_check(self):
@@ -114,6 +115,7 @@ class SyncTab(ttk.Frame):
         elif self.scraper_thread.is_alive():
             self.after(1000, self.thread_finished_check)
         else:
+            logging.debug('Synch thread not alive')
             self.sync_stop()
 
     def sync_start(self):
@@ -122,24 +124,22 @@ class SyncTab(ttk.Frame):
         self.scraper_thread = threading.Thread(target=self.sync_run, name="ScraperThread")
         self.scraper_thread_exit_event.clear()
         self.scraper_thread.start()
+        logging.debug('Synch started')
         self.after(1000, self.thread_finished_check)
 
     def sync_stop(self):
         self.processing_block()
+        logging.debug('Synch stopping')
         self.scraper_thread_exit_event.set()
         self.scraper_thread.join()
+        logging.debug('Synch stopped')
         self.scraper_thread = None
         self.sync_button.config(bootstyle=ttk.PRIMARY, text='Synchronizuj')
         self.processing_unblock()
 
     def sync_run(self):
         #TODO: SYNC & ABORT
-        for i in range(5):
-            if self.scraper_thread_exit_event.is_set():
-                break
-            self.bond_list_progress_var.set(random.random())
-            logging.info(i)
-            time.sleep(1)
+        self.scraper.start()
 
     def purge_database(self):
         #TODO: Okno dialogowe "czy na pewno?"

@@ -8,7 +8,7 @@ class DatabaseHandler:
 
     def __init__(self, db_name):
         logging.info('Connecting to the database')
-        self.db_connection = sqlite3.connect(db_name)
+        self.db_connection = sqlite3.connect(db_name, check_same_thread=False)
         self.sql_scripts = resources.files(__name__).joinpath('sql_scripts')
 
         self.create_tables()

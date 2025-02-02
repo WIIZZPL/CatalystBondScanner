@@ -17,8 +17,8 @@ if __name__ == "__main__":
         os.mkdir(log_file_dir)
 
     logging.basicConfig(filename=f'{log_file_dir}{log_file_name}', filemode='w',
-                        level=logging.INFO,
-                        format="%(asctime)s - %(levelname)s - %(threadName)s - %(module)s - %(funcName)s - %(message)s")
+                        level=logging.DEBUG,
+                        format="%(asctime)s %(levelname)s \t %(threadName)s \t %(module)s \t %(funcName)s \t %(message)s")
 
     #app start
 
@@ -26,7 +26,6 @@ if __name__ == "__main__":
     window = ttk.Window(title='Skaner Obligacji GPW', themename='darkly')
 
     database_handler = DatabaseHandler('CBS.db')
-    database_handler.update_last_modified_date()
 
     app_instance = CatalystBondScanner(master=window)
     app_instance.set_database_handler(database_handler)

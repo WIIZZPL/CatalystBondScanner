@@ -33,6 +33,7 @@ class AsyncRateLimiter:
             now = datetime.datetime.now()
             delta = now-self.last_request_datetime
             if delta > self.timeout:
+                self.last_request_datetime = now
                 return
             await asyncio.sleep((self.timeout-delta).total_seconds())
 
