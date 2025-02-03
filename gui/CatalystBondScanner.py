@@ -22,7 +22,7 @@ class CatalystBondScanner(ttk.Frame):
         self.issuer_tab = IssuerTab(master=self.tabs)
         self.sync_tab = SyncTab(master=self.tabs)
 
-        self.tabs.select(3)
+        self.tabs.select(1)
 
         self.tabs.bind("<<NotebookTabChanged>>", self.on_tab_change_event)
 

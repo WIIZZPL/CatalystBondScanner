@@ -46,7 +46,7 @@ class GPWListScraper(BaseScraper):
 
     async def save(self, parsed_resource):
         self.database_handler.upsert_bond_list(parsed_resource)
-        [await self.bond_scraper.put_todo(bond[1]) for bond in parsed_resource]
+        #[await self.bond_scraper.put_todo(bond[1]) for bond in parsed_resource]
 
     def set_bond_scraper(self, bond_scraper: GPWBondScraper):
         self.bond_scraper = bond_scraper

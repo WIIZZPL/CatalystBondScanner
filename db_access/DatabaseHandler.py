@@ -66,3 +66,12 @@ class DatabaseHandler:
                         self.db_connection.commit()
                     except sqlite3.Error as e:
                         logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname}\n{command.strip()}')
+
+    def select_bonds_view(self):
+        cursor = self.db_connection.cursor()
+        with self.sql_scripts.joinpath('select', 'select_bonds_view.sql').open('r') as script_file:
+            try:
+                result = cursor.execute(script_file.read()).fetchall()
+                return result
+            except sqlite3.Error as e:
+                logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname}')

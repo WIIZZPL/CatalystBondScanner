@@ -35,3 +35,19 @@ CREATE TABLE IF NOT EXISTS bond_markets (
     market_id       INTEGER         REFERENCES markets(id),
     PRIMARY KEY (bond_id, market_id)
 );
+
+CREATE VIEW IF NOT EXISTS bonds_view AS
+    SELECT
+        bonds.code,
+        issuers.name,
+        bonds.type,
+        bonds.price,
+        markets.name
+    FROM bonds
+    JOIN issuers
+        ON bonds.issuer_id = issuers.id
+    JOIN bond_markets
+        ON bond_markets.bond_id = bonds.id
+    JOIN markets
+        ON bond_markets.market_id = markets.id
+;
