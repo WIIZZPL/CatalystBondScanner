@@ -80,9 +80,9 @@ class SyncTab(ttk.Frame):
 
         #scraper
         self.scraper_thread: Thread = None
-        self.scraper_thread_exit_event = Event()
-        self.scraper = CombinedScraper(self.scraper_thread_exit_event)
+        self.scraper = CombinedScraper()
         self.scraper.set_database_handler(self.master.master.get_database_handler())
+        self.scraper.set_progress_vars([self.bond_list_progress_var, self.bonds_progress_var, self.issuers_progress_var])
 
     def on_tab_show(self):
         # last modify date update
@@ -120,9 +120,10 @@ class SyncTab(ttk.Frame):
 
     def sync_start(self):
         self.processing_block()
-        self.sync_button.config(bootstyle=ttk.DANGER, text='Zatrzymaj')
+        self.bond_list_progress_var.set(0)
+        self.bonds_progress_var.set(0)
+        self.issuers_progress_var.set(0)
         self.scraper_thread = threading.Thread(target=self.sync_run, name="ScraperThread")
-        self.scraper_thread_exit_event.clear()
         self.scraper_thread.start()
         logging.debug('Synch started')
         self.after(1000, self.thread_finished_check)
@@ -130,12 +131,11 @@ class SyncTab(ttk.Frame):
     def sync_stop(self):
         self.processing_block()
         logging.debug('Synch stopping')
-        self.scraper_thread_exit_event.set()
         self.scraper_thread.join()
         logging.debug('Synch stopped')
         self.scraper_thread = None
-        self.sync_button.config(bootstyle=ttk.PRIMARY, text='Synchronizuj')
         self.processing_unblock()
+        self.on_tab_show()
 
     def sync_run(self):
         #TODO: SYNC & ABORT
@@ -150,16 +150,23 @@ class SyncTab(ttk.Frame):
         database_handler.drop_tables()
         database_handler.create_tables()
         self.processing_unblock()
+
+        self.bond_list_progress_var.set(0)
+        self.bonds_progress_var.set(0)
+        self.issuers_progress_var.set(0)
+
         self.on_tab_show()
 
     def processing_block(self):
         self.purge_button['state'] = ttk.DISABLED
+        self.sync_button['state'] = ttk.DISABLED
         self.bond_list_progress.config(bootstyle='success-striped')
         self.bonds_progress.config(bootstyle='success-striped')
         self.issuers_progress.config(bootstyle='success-striped')
 
     def processing_unblock(self):
         self.purge_button['state'] = ttk.NORMAL
+        self.sync_button['state'] = ttk.NORMAL
         self.bond_list_progress.config(bootstyle='success')
         self.bonds_progress.config(bootstyle='success')
         self.issuers_progress.config(bootstyle='success')

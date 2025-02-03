@@ -50,4 +50,19 @@ class DatabaseHandler:
                 try:
                     cursor.execute(statement)
                 except sqlite3.Error as e:
-                    logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname}')
+                    logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname} \n {statement}')
+
+    def upsert_bond_list(self, bond_list):
+        logging.info("Upserting bond list")
+        cursor = self.db_connection.cursor()
+
+        with self.sql_scripts.joinpath('upsert', 'upsert_bond_list.sql').open('r') as script_file:
+            script = script_file.read()
+            for bond in bond_list:
+                payload = script.format(issuer_name=bond[0], code=bond[1], market_name=bond[2], price=bond[3].replace(',', '.'), currency_code=bond[4])
+                for command in payload.split(';'):
+                    try:
+                        result = cursor.execute(command)
+                        self.db_connection.commit()
+                    except sqlite3.Error as e:
+                        logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname}\n{command.strip()}')

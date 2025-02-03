@@ -10,8 +10,8 @@ from gui.tabs.SyncTab import SyncTab
 class CatalystBondScanner(ttk.Frame):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.database_handler = None
+        super().__init__(*args, **{i:kwargs[i] for i in kwargs if i!='database_handler'})
+        self.database_handler = kwargs['database_handler']
         self.pack(fill=BOTH, expand=YES)
 
         self.tabs = ttk.Notebook(self, width=1000, height=480)
@@ -35,9 +35,6 @@ class CatalystBondScanner(ttk.Frame):
     def switch_and_sync(self):
         self.tabs.select('.!catalystbondscanner.!notebook.!synctab')
         self.sync_tab.sync_button_action()
-
-    def set_database_handler(self, database_handler: DatabaseHandler):
-        self.database_handler = database_handler
 
     def get_database_handler(self) -> DatabaseHandler:
         return self.database_handler

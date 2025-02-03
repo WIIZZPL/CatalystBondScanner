@@ -1,6 +1,8 @@
 import asyncio
 import datetime
 import logging
+import threading
+import tkinter
 from threading import Event
 import httpx
 from httpx import Response
@@ -11,31 +13,38 @@ from scraper.AsyncRateLimiter import AsyncRateLimiter
 
 class BaseScraper:
 
-    def __init__(self, client: httpx.AsyncClient, database_handler: DatabaseHandler, limiter: AsyncRateLimiter,
-                 exit_event: Event, workers: int = 5):
+    def __init__(self, client: httpx.AsyncClient, database_handler: DatabaseHandler, limiter: AsyncRateLimiter, exit_event: Event, progress_var: tkinter.DoubleVar, workers: int = 5):
         self.client = client
         self.todo = asyncio.Queue()  #Items
-        self.done = set()  #URLs
+        self.seen = set() #URLs
+
+        self.lock = threading.Lock()
+        self.scheduled = 0
+        self.finished = 0
+        self.progress_var = progress_var
 
         self.database_handler = database_handler
         self.limiter = limiter
         self.exit_event = exit_event
 
+        self.workers = []
         self.max_workers = workers
 
-    def clear_queue(self):
-        self.todo = asyncio.Queue()
-        logging.warning('Todo queue cleared')
-
     def is_working(self):
-        return not self.todo.empty()
+        return self.scheduled > self.finished
 
     async def put_todo(self, item):
+        self.lock.acquire()
+        self.scheduled += 1
         await self.todo.put(item)
+        self.lock.release()
+
+    def update_prgoress(self):
+        self.progress_var.set(self.finished/self.scheduled)
 
     async def run(self):
         logging.debug('Scrapper start')
-        workers = [
+        self.workers = [
             asyncio.create_task(self.worker())
             for _ in range(self.max_workers)
         ]
@@ -45,7 +54,7 @@ class BaseScraper:
 
         logging.debug('Scrapper stopping')
 
-        for worker in workers:
+        for worker in self.workers:
             worker.cancel()
             try:
                 await worker
@@ -57,29 +66,37 @@ class BaseScraper:
         while True:
             try:
                 await self.process_one()
-            except asyncio.CancelledError:
+            except asyncio.CancelledError as e:
+                logging.debug(repr(e))
                 return
+            except Exception as e:
+                logging.exception(repr(e))
 
     async def process_one(self):
         item = await self.todo.get()
         try:
             await self.process(item)
         finally:
+            self.lock.acquire()
             self.todo.task_done()
+            self.finished += 1
+            self.update_prgoress()
+            self.lock.release()
 
     async def process(self, item):
         url = self.item_to_url(item)
 
-        if url in self.done:
+        if url in self.seen:
+            logging.debug(f'{item} already done as {url}, skipping')
             return
 
-        logging.debug('Waiting for limiter')
-        start = datetime.datetime.now()
+        self.seen.add(url)
+
+        logging.debug(f'{item} waiting for limiter')
         while True:
             async with self.limiter:
-                logging.debug('Sending request')
+                logging.debug(f'{item} sending request')
                 resource = await self.client.get(url, follow_redirects=True)
-
 
             parsed_resource, parse_success = self.parse(resource.text)
 
@@ -88,10 +105,9 @@ class BaseScraper:
 
             break
 
-        logging.debug('Saving parsed data')
-        #await self.save(parsed_resource)
-
-        self.done.add(url)
+        logging.debug(f'{item} saving')
+        await  self.save(parsed_resource)
+        logging.debug(f'{item} saved')
 
     def item_to_url(self, item: str) -> str:
         raise NotImplementedError

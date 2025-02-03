@@ -1,4 +1,5 @@
 import os.path
+
 import ttkbootstrap as ttk
 import logging, datetime
 
@@ -16,7 +17,7 @@ if __name__ == "__main__":
     if not os.path.exists(log_file_dir):
         os.mkdir(log_file_dir)
 
-    logging.basicConfig(filename=f'{log_file_dir}{log_file_name}', filemode='w',
+    logging.basicConfig(filename=f'{log_file_dir}{log_file_name}', filemode='w', encoding='utf-8',
                         level=logging.DEBUG,
                         format="%(asctime)s %(levelname)s \t %(threadName)s \t %(module)s \t %(funcName)s \t %(message)s")
 
@@ -27,7 +28,6 @@ if __name__ == "__main__":
 
     database_handler = DatabaseHandler('CBS.db')
 
-    app_instance = CatalystBondScanner(master=window)
-    app_instance.set_database_handler(database_handler)
+    app_instance = CatalystBondScanner(master=window, database_handler=database_handler)
 
     window.mainloop()
