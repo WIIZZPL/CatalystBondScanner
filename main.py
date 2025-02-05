@@ -1,4 +1,5 @@
 import os.path
+import sqlite3
 
 import ttkbootstrap as ttk
 import logging, datetime

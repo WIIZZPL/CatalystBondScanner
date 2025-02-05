@@ -13,10 +13,19 @@ class GPWListScraper(BaseScraper):
         return f'https://gpwcatalyst.pl/notowania-obligacji-{item}'
 
     def parse(self, resource):
-        result :[(str, str, str, str, str)] = [] # Issuer, Bond name, Market, Price, Currency
+        result :[(str, str, str, str, str, str)] = [] # Issuer, Bond name, Market, Price, Currency, Bond_type
         doc = BeautifulSoup(resource, 'html.parser')
         quotations = doc.find('div', id='bs_quotation')
         table_headers = quotations.find_all('div', style='display: flex; justify-content: space-between')
+
+        bond_type = doc.find('ol', class_='breadcrumb').find('li', class_='active').text
+        bond_type = {
+            'Obligacje korporacyjne': 'Korporacyjna',
+            'Obligacje spółdzielcze': 'Spółdzielcza',
+            'Obligacje skarbowe': 'Skarbowa',
+            'Obligacje komunalne': 'Komunalna',
+            'Listy zastawne': 'List zastany',
+        }[bond_type]
 
         #Seperates quotations into tables by currency
         for table_header in table_headers:
@@ -40,13 +49,13 @@ class GPWListScraper(BaseScraper):
                 market = market_cell.text.replace(u'\xa0', ' ')
                 price = price_cell.text
 
-                result.append((issuer, bond, market, price, currency))
+                result.append((issuer, bond, market, price, currency, bond_type))
 
         return result, True
 
     async def save(self, parsed_resource):
         self.database_handler.upsert_bond_list(parsed_resource)
-        #[await self.bond_scraper.put_todo(bond[1]) for bond in parsed_resource]
+        [await self.bond_scraper.put_todo(bond[1]) for bond in parsed_resource]
 
     def set_bond_scraper(self, bond_scraper: GPWBondScraper):
         self.bond_scraper = bond_scraper

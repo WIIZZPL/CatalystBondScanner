@@ -10,8 +10,20 @@ ON CONFLICT(name)
     DO NOTHING
 ;
 
-INSERT INTO bonds(issuer_id, code, price, currency_code)
-    VALUES (( SELECT id FROM issuers WHERE name = '{issuer_name}'), '{code}', {price}, '{currency_code}')
+INSERT INTO instrument_types(name)
+    VALUES ('{instrument_type_name}')
+ON CONFLICT(name)
+    DO NOTHING
+;
+
+INSERT INTO bonds(issuer_id, code, price, currency_code, type_id)
+    VALUES (
+        ( SELECT id FROM issuers WHERE name = '{issuer_name}'),
+        '{code}',
+        {price},
+        '{currency_code}',
+        ( SELECT id FROM instrument_types WHERE name = '{instrument_type_name}')
+        )
 ON CONFLICT(code)
     DO UPDATE SET price={price}
 ;

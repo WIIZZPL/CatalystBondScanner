@@ -11,6 +11,7 @@ from PIL.ImageTk import PhotoImage
 from pytablericons import TablerIcons, OutlineIcon
 
 from db_access import DatabaseHandler
+from gui import CatalystBondScanner
 from scraper.CombinedScraper import CombinedScraper
 
 
@@ -20,7 +21,7 @@ class SyncTab(ttk.Frame):
         super().__init__(*args, **kwargs)
 
         self.master: ttk.Notebook = kwargs['master']
-
+        self.app: CatalystBondScanner = self.master.master
         self.tab_icon_img = PhotoImage(TablerIcons.load(OutlineIcon.SEARCH))
         self.pack(fill='both', expand=True)
 
@@ -81,12 +82,12 @@ class SyncTab(ttk.Frame):
         #scraper
         self.scraper_thread: Thread = None
         self.scraper = CombinedScraper()
-        self.scraper.set_database_handler(self.master.master.get_database_handler())
+        self.scraper.set_database_handler(self.app.get_database_handler())
         self.scraper.set_progress_vars([self.bond_list_progress_var, self.bonds_progress_var, self.issuers_progress_var])
 
     def on_tab_show(self):
         # last modify date update
-        last_modified_date: datetime.date = self.master.master.get_database_handler().get_last_modified_date()
+        last_modified_date: datetime.date = self.app.get_database_handler().get_last_modified_date()
 
         if last_modified_date is None:
             self.last_update_date_label.configure(bootstyle='inverse-danger')
@@ -146,7 +147,7 @@ class SyncTab(ttk.Frame):
 
         logging.warning("Purging database")
         self.processing_block()
-        database_handler: DatabaseHandler = self.master.master.get_database_handler()
+        database_handler: DatabaseHandler = self.app.get_database_handler()
         database_handler.drop_tables()
         database_handler.create_tables()
         self.processing_unblock()

@@ -1,8 +1,10 @@
 import  ttkbootstrap as ttk
 import ttkbootstrap.tableview
 from PIL.ImageTk import PhotoImage
-from bs4.diagnose import rword
 from pytablericons import TablerIcons, OutlineIcon
+
+from gui import CatalystBondScanner
+
 
 class ScannerTab(ttk.Frame):
 
@@ -10,41 +12,48 @@ class ScannerTab(ttk.Frame):
         super().__init__(*args, **kwargs)
 
         self.master: ttk.Notebook = kwargs['master']
-
+        self.app :CatalystBondScanner = self.master.master
         self.tab_icon_img = PhotoImage(TablerIcons.load(OutlineIcon.SEARCH))
         self.pack(fill='both', expand=True)
-
         self.master.add(self, compound=ttk.TOP, image=self.tab_icon_img, text='Skaner')
+
+        self.control_panel = ttk.LabelFrame(master=self, text='Ustawienia')
+        self.control_panel.pack(fill='x', padx=10, pady=10)
+
+        self.background = ttk.Label(master=self.control_panel, background='red')
+        self.background.pack(fill='both', expand=True)
 
 
         coldata = [
-            'code',
-            'issuer',
-            'type',
-            'price',
-            'market'
+            {'text': 'Obligacja', 'stretch': False},
+            {'text': 'Emitent', 'stretch': False},
+            {'text': 'Typ obligacji', 'stretch': False},
+            {'text': 'Cena', 'stretch': False},
+            {'text': 'Segment', 'stretch': False}
         ]
-        self.table = ttkbootstrap.tableview.Tableview(master=self, coldata=coldata, paginated=True)
-        self.table.pack(fill='both', expand=True)
+        self.table = ttkbootstrap.tableview.Tableview(master=self, coldata=coldata, autofit=True, searchable=True, delimiter=';', bootstyle=ttk.INFO)
+        self.table.pack(fill='both', expand=True, padx=10, pady=10)
         self.update_table()
 
     def update_table(self):
-        values = self.master.master.get_database_handler().select_bonds_view()
-        rows = self.table.tablerows
+        values = self.app.get_database_handler().select_bonds_view()
+        rows = self.table.get_rows()
 
-        for value in values:
-            for row in rows:
-                if row.values[0] == value[0] and row.values[-1] == value[-1]:
+        for row in rows[::-1]:
+            row_value = row.values
+            row_found = False
+            for value in values:
+                #print(f'Comparing: {value[0]} with {row_value[0]} and {value[4]} with {row_value[4]}')
+                if value[0] == row_value[0]:
+                    row.configure(values=value)
                     values.remove(value)
-                    rows.remove(row)
-                    row.refresh()
+                    row_found = True
                     break
 
-        print(len(values))
-        for value in values:
-            self.table.insert_row('end', value)
-            self.table.tablerows[-1].build()
+            if not row_found:
+                rows.remove(row)
 
+        self.table.insert_rows('end', values)
         self.table.load_table_data()
 
         self.after(1000, self.update_table)

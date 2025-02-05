@@ -3,17 +3,27 @@ CREATE TABLE IF NOT EXISTS last_modified (
     date             VARCHAR(10)    NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS issuer_types(
+    id              INTEGER         PRIMARY KEY,
+    name            VARCHAR(64)     NOT NULL UNIQUE
+);
+
 CREATE TABLE IF NOT EXISTS issuers (
     id               INTEGER        PRIMARY KEY,
     name             VARCHAR(128)   NOT NULL UNIQUE,
-    type             VARCHAR(64)
+    type_id          INTEGER        REFERENCES issuer_types(id)
+);
+
+CREATE TABLE IF NOT EXISTS instrument_types (
+    id              INTEGER         PRIMARY KEY,
+    name            VARCHAR(64)     NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS bonds (
     id               INTEGER        PRIMARY KEY,
     issuer_id        INTEGER        REFERENCES issuers(id),
     code             VARCHAR(16)    NOT NULL UNIQUE,
-    type             VARCHAR(64),
+    type_id          INTEGER        REFERENCES instrument_types(id),
     price            DECIMAL(4, 4),
     par_value        DECIMAL(10, 2) CHECK (par_value > 0),
     currency_code    VARCHAR(3),
@@ -40,9 +50,9 @@ CREATE VIEW IF NOT EXISTS bonds_view AS
     SELECT
         bonds.code,
         issuers.name,
-        bonds.type,
+        instrument_types.name,
         bonds.price,
-        markets.name
+        GROUP_CONCAT(markets.name, ', ')
     FROM bonds
     JOIN issuers
         ON bonds.issuer_id = issuers.id
@@ -50,4 +60,8 @@ CREATE VIEW IF NOT EXISTS bonds_view AS
         ON bond_markets.bond_id = bonds.id
     JOIN markets
         ON bond_markets.market_id = markets.id
+    JOIN instrument_types
+        ON bonds.type_id = instrument_types.id
+    GROUP BY
+        1, 2, 3, 4
 ;
