@@ -1,15 +1,10 @@
-import asyncio
 import re
-
 from bs4 import BeautifulSoup
-
 from scraper.component_scrappers.BaseScraper import BaseScraper
-from scraper.component_scrappers.GPWBondScraper import GPWBondScraper
-
 
 class GPWListScraper(BaseScraper):
 
-    def item_to_url(self, item):
+    async def item_to_url(self, item):
         return f'https://gpwcatalyst.pl/notowania-obligacji-{item}'
 
     def parse(self, resource):
@@ -47,7 +42,7 @@ class GPWListScraper(BaseScraper):
 
                 bond = bond_cell.find('a').text.strip() if bond_cell is not None else result[-1][1]
                 market = market_cell.text.replace(u'\xa0', ' ')
-                price = price_cell.text
+                price = price_cell.text.replace(',', '.')
 
                 result.append((issuer, bond, market, price, currency, bond_type))
 
@@ -55,7 +50,8 @@ class GPWListScraper(BaseScraper):
 
     async def save(self, parsed_resource):
         self.database_handler.upsert_bond_list(parsed_resource)
-        [await self.bond_scraper.put_todo(bond[1]) for bond in parsed_resource]
-
-    def set_bond_scraper(self, bond_scraper: GPWBondScraper):
-        self.bond_scraper = bond_scraper
+        [await self.next_scrapers['GPW_bond_detail'].put_todo(bond[1]) for bond in parsed_resource]
+        [await self.next_scrapers['Obligacje_bond_detail'].put_todo(bond[1]) for bond in parsed_resource]
+        for bond in parsed_resource:
+            if bond[5] == 'Korporacyjna':
+                await self.next_scrapers['StockWatch_issuer_detail'].put_todo(bond[1])

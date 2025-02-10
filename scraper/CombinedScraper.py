@@ -10,14 +10,20 @@ from db_access import DatabaseHandler
 from scraper.AsyncRateLimiter import AsyncRateLimiter
 from scraper.component_scrappers.GPWBondScraper import GPWBondScraper
 from scraper.component_scrappers.GPWListScraper import GPWListScraper
+from scraper.component_scrappers.ObligacjeBondScraper import ObligacjeBondScraper
+from scraper.component_scrappers.StockwatchIssuerScraper import StockwatchIssuerScraper
 
 
 class CombinedScraper:
     def __init__(self):
-        self.database_handler = None
+        self.database_handler :DatabaseHandler = None
         self.exit_event = threading.Event()
-        self.client = httpx.AsyncClient()
-        self.progress_vars = []
+        self.client = httpx.AsyncClient(headers={
+            'Connection': 'close',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Safari/537.36',
+            'Accept-Language': 'en-US;q=0.5,en;q=0.3'
+        })
+        self.progress_vars = {}
 
     def set_database_handler(self, database_handler: DatabaseHandler):
         self.database_handler = database_handler
@@ -25,22 +31,30 @@ class CombinedScraper:
     def start(self):
         self.exit_event.clear()
         gpw_limiter = AsyncRateLimiter('gpwcatalyst.pl')
+        obligacje_limiter = AsyncRateLimiter('obligacje.pl')
+        stockwatch_limiter = AsyncRateLimiter('stockwatch.pl')
 
         scrappers = [
-            GPWListScraper(self.client, self.database_handler, gpw_limiter, self.exit_event, self.progress_vars[0]),
-            GPWBondScraper(self.client, self.database_handler, gpw_limiter, self.exit_event, self.progress_vars[1])
+            GPWListScraper(self.client, self.database_handler, gpw_limiter, self.exit_event, self.progress_vars['GPW_bond_list']),
+            GPWBondScraper(self.client, self.database_handler, gpw_limiter, self.exit_event, self.progress_vars['GPW_bond_detail']),
+            ObligacjeBondScraper(self.client, self.database_handler, obligacje_limiter, self.exit_event, self.progress_vars['Obligacje_bond_detail']),
+            StockwatchIssuerScraper(self.client, self.database_handler, stockwatch_limiter, self.exit_event, self.progress_vars['StockWatch_issuer_detail'])
         ]
 
-        scrappers[0].set_bond_scraper(scrappers[1])
+        scrappers[0].set_next_scraper('GPW_bond_detail', scrappers[1])
+        scrappers[0].set_next_scraper('Obligacje_bond_detail', scrappers[2])
+        scrappers[0].set_next_scraper('StockWatch_issuer_detail', scrappers[3])
 
         threads = [
-            threading.Thread(target=asyncio.run, args=(scrapper.run(),) , name=f'{scrapper.__class__.__name__} {i}')
+            threading.Thread(target=asyncio.run, args=(scrapper.run(),) , name=f'{scrapper.__class__.__name__}')
             for i, scrapper in enumerate(scrappers)
         ]
 
         for thread in threads:
             thread.start()
             logging.debug(f'{thread.name} started')
+
+        self.database_handler.delete_bond_list()
 
         [asyncio.run(scrappers[0].put_todo(item)) for item in [
             'obligacje-korporacyjne',
@@ -61,5 +75,5 @@ class CombinedScraper:
 
         self.database_handler.update_last_modified_date()
 
-    def set_progress_vars(self, progress_vars: [tkinter.DoubleVar]):
+    def set_progress_vars(self, progress_vars: {str: tkinter.DoubleVar}):
         self.progress_vars = progress_vars

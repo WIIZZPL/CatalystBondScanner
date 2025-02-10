@@ -19,8 +19,8 @@ if __name__ == "__main__":
         os.mkdir(log_file_dir)
 
     logging.basicConfig(filename=f'{log_file_dir}{log_file_name}', filemode='w', encoding='utf-8',
-                        level=logging.DEBUG,
-                        format="%(asctime)s %(levelname)s \t %(threadName)s \t %(module)s \t %(funcName)s \t %(message)s")
+                        level=logging.INFO,
+                        format="%(asctime)s %(levelname)s\t%(threadName)s\t%(module)s\t%(funcName)s\t%(message)s")
 
     #app start
 

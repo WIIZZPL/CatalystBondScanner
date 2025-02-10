@@ -1,11 +1,12 @@
 import asyncio
-import datetime
 import logging
+import random
 import threading
 import tkinter
+from asyncio import new_event_loop
 from threading import Event
+
 import httpx
-from httpx import Response
 
 from db_access import DatabaseHandler
 from scraper.AsyncRateLimiter import AsyncRateLimiter
@@ -30,8 +31,21 @@ class BaseScraper:
         self.workers = []
         self.max_workers = workers
 
+        self.next_scrapers : {str: BaseScraper} = {}
+
+    def set_next_scraper(self, key, next_scraper):
+        self.next_scrapers[key] = next_scraper
+
     def is_working(self):
-        return self.scheduled > self.finished
+        working = 0
+        for worker in self.workers:
+            if not worker.done():
+                working += 1
+
+        return self.scheduled > self.finished and working > 0
+
+    def has_finished_all(self):
+        return self.scheduled == self.finished
 
     async def put_todo(self, item):
         self.lock.acquire()
@@ -84,7 +98,11 @@ class BaseScraper:
             self.lock.release()
 
     async def process(self, item):
-        url = self.item_to_url(item)
+        url = await self.item_to_url(item)
+
+        if url is None:
+            logging.debug(f'{item} URL not found')
+            return
 
         if url in self.seen:
             logging.debug(f'{item} already done as {url}, skipping')
@@ -96,7 +114,12 @@ class BaseScraper:
         while True:
             async with self.limiter:
                 logging.debug(f'{item} sending request')
-                resource = await self.client.get(url, follow_redirects=True)
+                try:
+                    resource = await self.client.get(url, follow_redirects=True)
+                except httpx.ReadTimeout:
+                    logging.info(f'{item} timeout')
+                    await asyncio.sleep(5)
+                    continue
 
             parsed_resource, parse_success = self.parse(resource.text)
 
@@ -109,7 +132,7 @@ class BaseScraper:
         await  self.save(parsed_resource)
         logging.debug(f'{item} saved')
 
-    def item_to_url(self, item: str) -> str:
+    async def item_to_url(self, item: str) -> str:
         raise NotImplementedError
 
     def parse(self, resource: str) -> (str, bool):

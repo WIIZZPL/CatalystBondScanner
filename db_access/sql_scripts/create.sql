@@ -1,67 +1,96 @@
 CREATE TABLE IF NOT EXISTS last_modified (
-    id               INTEGER        PRIMARY KEY NOT NULL CHECK (id = 1),
-    date             VARCHAR(10)    NOT NULL
+    id                INTEGER        PRIMARY KEY NOT NULL CHECK (id = 1),
+    date              DATE           NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS issuer_types(
-    id              INTEGER         PRIMARY KEY,
-    name            VARCHAR(64)     NOT NULL UNIQUE
+    id                INTEGER        PRIMARY KEY,
+    name              VARCHAR(64)    NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS issuers (
-    id               INTEGER        PRIMARY KEY,
-    name             VARCHAR(128)   NOT NULL UNIQUE,
-    type_id          INTEGER        REFERENCES issuer_types(id)
+    id                INTEGER        PRIMARY KEY,
+    name              VARCHAR(128)   NOT NULL UNIQUE,
+    type_id           INTEGER        REFERENCES issuer_types(id)
 );
 
 CREATE TABLE IF NOT EXISTS instrument_types (
-    id              INTEGER         PRIMARY KEY,
-    name            VARCHAR(64)     NOT NULL UNIQUE
+    id                INTEGER        PRIMARY KEY,
+    name              VARCHAR(64)    NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS interest_types (
+    id                INTEGER        PRIMARY KEY,
+    name              VARCHAR(16)    NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS indexes(
+    id                INTEGER        PRIMARY KEY,
+    name              VARCHAR(16)    NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS bond_payment_dates(
+    bond_id           INTEGER        REFERENCES bonds(id),
+    date              DATE,
+    PRIMARY KEY (bond_id, date)
 );
 
 CREATE TABLE IF NOT EXISTS bonds (
-    id               INTEGER        PRIMARY KEY,
-    issuer_id        INTEGER        REFERENCES issuers(id),
-    code             VARCHAR(16)    NOT NULL UNIQUE,
-    type_id          INTEGER        REFERENCES instrument_types(id),
-    price            DECIMAL(4, 4),
-    par_value        DECIMAL(10, 2) CHECK (par_value > 0),
-    currency_code    VARCHAR(3),
-    interest_rate    DECIMAL(3, 4),
-    index_name       VARCHAR(16),
-    accrued_interest DECIMAL(4, 2),
-    bond_count       INTEGER        CHECK (bond_count > 0),
-    maturity_date    VARCHAR(10),
-    no_payments_anum INTEGER        CHECK (no_payments_anum >= 0)
+    id                INTEGER        PRIMARY KEY,
+    issuer_id         INTEGER        REFERENCES issuers(id),
+    code              VARCHAR(16)    NOT NULL UNIQUE,
+    type_id           INTEGER        REFERENCES instrument_types(id),
+    par_value         DECIMAL(10, 2) CHECK (par_value > 0),
+    currency_code     VARCHAR(3),
+    c_interest_rate   DECIMAL(3, 4),
+    base_interest     DECIMAL(3, 4),
+    interest_type_id  INTEGER        REFERENCES instrument_types(id),
+    index_id          INTEGER        REFERENCES indexes(id),
+    accrued_interest  DECIMAL(10, 2),
+    issue_value       INTEGER        CHECK (issue_value > 0),
+    maturity_date     DATE,
+    is_secured        BOOLEAN,
+    additional_info   TEXT
 );
 
 CREATE TABLE IF NOT EXISTS markets (
-    id              INTEGER         PRIMARY KEY,
-    name            VARCHAR(16)     NOT NULL UNIQUE
+    id                INTEGER        PRIMARY KEY,
+    name              VARCHAR(16)    NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS bond_markets (
-    bond_id         INTEGER         REFERENCES bonds(id),
-    market_id       INTEGER         REFERENCES markets(id),
+    bond_id           INTEGER        REFERENCES bonds(id),
+    market_id         INTEGER        REFERENCES markets(id),
+    price             DECIMAL(4, 4),
     PRIMARY KEY (bond_id, market_id)
 );
 
 CREATE VIEW IF NOT EXISTS bonds_view AS
     SELECT
-        bonds.code,
-        issuers.name,
-        instrument_types.name,
-        bonds.price,
-        GROUP_CONCAT(markets.name, ', ')
+        bonds.code AS bond_code,
+        instrument_types.name AS instrument_type_name,
+        issuers.name AS issuer_name,
+        bonds.maturity_date AS maturity_date,
+        bonds.par_value AS par_value,
+        bonds.currency_code AS currency_code,
+        bond_markets.price AS bond_market_price,
+        markets.name AS market_name,
+        bonds.c_interest_rate AS current_interest,
+        bonds.base_interest AS base_interest,
+        interest_types.name AS interest_type_name,
+        indexes.name AS index_name,
+        bonds.accrued_interest AS accrued_interest
     FROM bonds
-    JOIN issuers
+    LEFT JOIN issuers
         ON bonds.issuer_id = issuers.id
-    JOIN bond_markets
+    LEFT JOIN bond_markets
         ON bond_markets.bond_id = bonds.id
-    JOIN markets
+    LEFT JOIN markets
         ON bond_markets.market_id = markets.id
-    JOIN instrument_types
+    LEFT JOIN instrument_types
         ON bonds.type_id = instrument_types.id
-    GROUP BY
-        1, 2, 3, 4
+    LEFT JOIN interest_types
+        ON bonds.interest_type_id = interest_types.id
+    LEFT JOIN indexes
+        ON bonds.index_id = indexes.id
 ;

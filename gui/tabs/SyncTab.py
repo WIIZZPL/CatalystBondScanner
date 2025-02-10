@@ -27,6 +27,9 @@ class SyncTab(ttk.Frame):
 
         self.master.add(self, compound=ttk.TOP, image=self.tab_icon_img, text='Synchronizacja')
 
+        self.progress_vars = {}
+        self.progress_bars = {}
+
         self.top_frame = ttk.Frame(self)
         self.top_frame.pack(fill='x', pady=10, padx=10)
         self.middle_frame = ttk.Frame(self)
@@ -56,23 +59,30 @@ class SyncTab(ttk.Frame):
 
         #middle frame
 
-        self.bond_list_progress_var = ttk.DoubleVar()
         self.bond_list_frame = ttk.LabelFrame(self.middle_frame, text='Lista obligacje i emitentów')
         self.bond_list_frame.pack(fill='x', padx=10, pady=10)
-        self.bond_list_progress = ttk.Progressbar(self.bond_list_frame, variable=self.bond_list_progress_var, maximum=1, bootstyle='success')
-        self.bond_list_progress.pack(fill='x', padx=10, pady=10)
 
-        self.bonds_progress_var = ttk.DoubleVar()
-        self.bonds_frame = ttk.LabelFrame(self.middle_frame, text='Detale obligacji')
+        self.progress_vars['GPW_bond_list'] = ttk.DoubleVar()
+        self.progress_bars['GPW_bond_list'] = ttk.Progressbar(self.bond_list_frame, variable=self.progress_vars['GPW_bond_list'], maximum=1, bootstyle='success')
+        self.progress_bars['GPW_bond_list'].pack(fill='x', padx=10, pady=10)
+
+        self.bonds_frame = ttk.LabelFrame(self.middle_frame, text='Dane obligacji')
         self.bonds_frame.pack(fill='x', padx=10, pady=10)
-        self.bonds_progress = ttk.Progressbar(self.bonds_frame, variable=self.bonds_progress_var, maximum=1, bootstyle='success')
-        self.bonds_progress.pack(fill='x', padx=10, pady=10)
 
-        self.issuers_progress_var = ttk.DoubleVar()
-        self.issuers_frame = ttk.LabelFrame(self.middle_frame, text='Detale emitentów')
+        self.progress_vars['GPW_bond_detail'] = ttk.DoubleVar()
+        self.progress_bars['GPW_bond_detail'] = ttk.Progressbar(self.bonds_frame, variable=self.progress_vars['GPW_bond_detail'], maximum=1, bootstyle='success')
+        self.progress_bars['GPW_bond_detail'].pack(fill='x', padx=10, pady=10)
+
+        self.progress_vars['Obligacje_bond_detail'] = ttk.DoubleVar()
+        self.progress_bars['Obligacje_bond_detail'] = ttk.Progressbar(self.bonds_frame, variable=self.progress_vars['Obligacje_bond_detail'], maximum=1, bootstyle='success')
+        self.progress_bars['Obligacje_bond_detail'].pack(fill='x', padx=10, pady=10)
+
+        self.issuers_frame = ttk.LabelFrame(self.middle_frame, text='Dane emitentów')
         self.issuers_frame.pack(fill='x', padx=10, pady=10)
-        self.issuers_progress = ttk.Progressbar(self.issuers_frame, variable=self.issuers_progress_var, maximum=1, bootstyle='success')
-        self.issuers_progress.pack(fill='x', padx=10, pady=10)
+
+        self.progress_vars['StockWatch_issuer_detail'] = ttk.DoubleVar()
+        self.progress_bars['StockWatch_issuer_detail'] = ttk.Progressbar(self.issuers_frame, variable=self.progress_vars['StockWatch_issuer_detail'], maximum=1, bootstyle='success')
+        self.progress_bars['StockWatch_issuer_detail'].pack(fill='x', padx=10, pady=10)
 
         #bottom frame
 
@@ -83,7 +93,7 @@ class SyncTab(ttk.Frame):
         self.scraper_thread: Thread = None
         self.scraper = CombinedScraper()
         self.scraper.set_database_handler(self.app.get_database_handler())
-        self.scraper.set_progress_vars([self.bond_list_progress_var, self.bonds_progress_var, self.issuers_progress_var])
+        self.scraper.set_progress_vars(self.progress_vars)
 
     def on_tab_show(self):
         # last modify date update
@@ -121,9 +131,8 @@ class SyncTab(ttk.Frame):
 
     def sync_start(self):
         self.processing_block()
-        self.bond_list_progress_var.set(0)
-        self.bonds_progress_var.set(0)
-        self.issuers_progress_var.set(0)
+        for i in self.progress_vars:
+            self.progress_vars[i].set(0)
         self.scraper_thread = threading.Thread(target=self.sync_run, name="ScraperThread")
         self.scraper_thread.start()
         logging.debug('Synch started')
@@ -152,25 +161,22 @@ class SyncTab(ttk.Frame):
         database_handler.create_tables()
         self.processing_unblock()
 
-        self.bond_list_progress_var.set(0)
-        self.bonds_progress_var.set(0)
-        self.issuers_progress_var.set(0)
+        for key in self.progress_vars:
+            self.progress_vars[key].set(0)
 
         self.on_tab_show()
 
     def processing_block(self):
         self.purge_button['state'] = ttk.DISABLED
         self.sync_button['state'] = ttk.DISABLED
-        self.bond_list_progress.config(bootstyle='success-striped')
-        self.bonds_progress.config(bootstyle='success-striped')
-        self.issuers_progress.config(bootstyle='success-striped')
+        for key in self.progress_bars:
+            self.progress_bars[key].config(bootstyle='success-striped')
 
     def processing_unblock(self):
         self.purge_button['state'] = ttk.NORMAL
         self.sync_button['state'] = ttk.NORMAL
-        self.bond_list_progress.config(bootstyle='success')
-        self.bonds_progress.config(bootstyle='success')
-        self.issuers_progress.config(bootstyle='success')
+        for key in self.progress_bars:
+            self.progress_bars[key].config(bootstyle='success')
     
     def destroy(self):
         if self.scraper_thread is not None and self.scraper_thread.is_alive():

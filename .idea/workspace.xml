@@ -4,15 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment="table">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment="Table update fixed,&#10;Database modified">
+      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/delete/delete_bond_list.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_GPW_bond_detail.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_obligacje_bond_detail.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_obligacje_bond_payment_dates.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scraper/component_scrappers/ObligacjeBondScraper.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerScraper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db_access/DatabaseHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/DatabaseHandler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/create.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/create.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/drop.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/drop.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/select/select_bonds_view.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/select/select_bonds_view.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_bond_list.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_bond_list.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/tabs/ScannerTab.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/tabs/ScannerTab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/tabs/SyncTab.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/tabs/SyncTab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/CombinedScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/CombinedScraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/BaseScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/BaseScraper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/GPWBondScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/GPWBondScraper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/GPWListScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/GPWListScraper.py" afterDir="false" />
     </list>
@@ -62,12 +71,13 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/WIIZZ/Documents/Repos/CatalystBondScanner/db_access/sql_scripts&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/WIIZZ/Documents/Repos/CatalystBondScanner/db_access/sql_scripts/upsert&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\db_access\sql_scripts\upsert" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\db_access\sql_scripts" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\db_access\sql_scripts\update" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\gui" />
@@ -161,7 +171,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738556510981</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Table update fixed,&#10;Database modified">
+      <option name="closed" value="true" />
+      <created>1738716234210</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1738716234210</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -186,6 +204,7 @@
     <MESSAGE value="GPW list parser done" />
     <MESSAGE value="GPW Bond Scraper todo" />
     <MESSAGE value="table" />
-    <option name="LAST_COMMIT_MESSAGE" value="table" />
+    <MESSAGE value="Table update fixed,&#10;Database modified" />
+    <option name="LAST_COMMIT_MESSAGE" value="Table update fixed,&#10;Database modified" />
   </component>
 </project>
