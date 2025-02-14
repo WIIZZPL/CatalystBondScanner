@@ -98,7 +98,7 @@ class BaseScraper:
             self.lock.release()
 
     async def process(self, item):
-        url = await self.item_to_url(item)
+        url = self.item_to_url(item)
 
         if url is None:
             logging.debug(f'{item} URL not found')
@@ -116,7 +116,7 @@ class BaseScraper:
                 logging.debug(f'{item} sending request')
                 try:
                     resource = await self.client.get(url, follow_redirects=True)
-                except httpx.ReadTimeout:
+                except (httpx.ReadTimeout, httpx.ConnectTimeout, httpx.RemoteProtocolError):
                     logging.info(f'{item} timeout')
                     await asyncio.sleep(5)
                     continue
@@ -132,7 +132,7 @@ class BaseScraper:
         await  self.save(parsed_resource)
         logging.debug(f'{item} saved')
 
-    async def item_to_url(self, item: str) -> str:
+    def item_to_url(self, item: str) -> str:
         raise NotImplementedError
 
     def parse(self, resource: str) -> (str, bool):

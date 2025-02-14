@@ -3,15 +3,11 @@ CREATE TABLE IF NOT EXISTS last_modified (
     date              DATE           NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS issuer_types(
-    id                INTEGER        PRIMARY KEY,
-    name              VARCHAR(64)    NOT NULL UNIQUE
-);
-
 CREATE TABLE IF NOT EXISTS issuers (
     id                INTEGER        PRIMARY KEY,
     name              VARCHAR(128)   NOT NULL UNIQUE,
-    type_id           INTEGER        REFERENCES issuer_types(id)
+    sw_code           VARCHAR(16)    UNIQUE,
+    is_public_issuer  BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS instrument_types (

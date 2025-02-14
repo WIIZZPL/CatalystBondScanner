@@ -5,7 +5,7 @@ from scraper.component_scrappers.BaseScraper import BaseScraper
 
 class GPWBondScraper(BaseScraper):
 
-    async def item_to_url(self, item):
+    def item_to_url(self, item):
         return f'https://gpwcatalyst.pl/o-instrumentach-instrument?nazwa={item}'
 
     def parse(self, resource):

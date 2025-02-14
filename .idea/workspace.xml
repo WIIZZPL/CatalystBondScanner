@@ -4,26 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment="Table update fixed,&#10;Database modified">
-      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/delete/delete_bond_list.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_GPW_bond_detail.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_obligacje_bond_detail.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_obligacje_bond_payment_dates.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraper/component_scrappers/ObligacjeBondScraper.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerScraper.py" afterDir="false" />
+    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment="Więcej danych&#10;Todo: Dane emitentów&#10;lepsza tablica&#10;AI!">
+      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_sw_issuer_bonds.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerBondScraper.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerFinanceScraper.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerListScraper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db_access/DatabaseHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/DatabaseHandler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/create.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/create.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/drop.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/drop.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/select/select_bonds_view.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/select/select_bonds_view.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_bond_list.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_bond_list.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/select/select_bonds_view.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/select/select_bonds_table.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_bond_list.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_GPW_bond_list.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/tabs/ScannerTab.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/tabs/ScannerTab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/tabs/SyncTab.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/tabs/SyncTab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/AsyncRateLimiter.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/AsyncRateLimiter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/CombinedScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/CombinedScraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/ConfigWriter.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/BaseScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/BaseScraper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/GPWBondScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/GPWBondScraper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/GPWListScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/GPWListScraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/ObligacjeBondScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/ObligacjeBondScraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerScraper.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/config.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +121,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-a5bc9544c897-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.23654.177" />
+        <option value="bundled-python-sdk-fc1d50d2d915-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.24978.54" />
       </set>
     </attachedChunks>
   </component>
@@ -179,7 +182,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738716234210</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Więcej danych&#10;Todo: Dane emitentów&#10;lepsza tablica&#10;AI!">
+      <option name="closed" value="true" />
+      <created>1739158308385</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1739158308386</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -205,6 +216,7 @@
     <MESSAGE value="GPW Bond Scraper todo" />
     <MESSAGE value="table" />
     <MESSAGE value="Table update fixed,&#10;Database modified" />
-    <option name="LAST_COMMIT_MESSAGE" value="Table update fixed,&#10;Database modified" />
+    <MESSAGE value="Więcej danych&#10;Todo: Dane emitentów&#10;lepsza tablica&#10;AI!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Więcej danych&#10;Todo: Dane emitentów&#10;lepsza tablica&#10;AI!" />
   </component>
 </project>

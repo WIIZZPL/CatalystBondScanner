@@ -10,6 +10,5 @@ SELECT
     current_interest,
     base_interest,
     interest_type_name,
-    index_name,
-    accrued_interest
+    index_name
 FROM bonds_view

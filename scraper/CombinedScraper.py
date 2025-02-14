@@ -11,7 +11,9 @@ from scraper.AsyncRateLimiter import AsyncRateLimiter
 from scraper.component_scrappers.GPWBondScraper import GPWBondScraper
 from scraper.component_scrappers.GPWListScraper import GPWListScraper
 from scraper.component_scrappers.ObligacjeBondScraper import ObligacjeBondScraper
-from scraper.component_scrappers.StockwatchIssuerScraper import StockwatchIssuerScraper
+from scraper.component_scrappers.StockwatchIssuerBondScraper import StockwatchIssuerBondScraper
+from scraper.component_scrappers.StockwatchIssuerFinanceScraper import StockwatchIssuerFinanceScraper
+from scraper.component_scrappers.StockwatchIssuerListScraper import StockwatchIssuerListScraper
 
 
 class CombinedScraper:
@@ -38,12 +40,16 @@ class CombinedScraper:
             GPWListScraper(self.client, self.database_handler, gpw_limiter, self.exit_event, self.progress_vars['GPW_bond_list']),
             GPWBondScraper(self.client, self.database_handler, gpw_limiter, self.exit_event, self.progress_vars['GPW_bond_detail']),
             ObligacjeBondScraper(self.client, self.database_handler, obligacje_limiter, self.exit_event, self.progress_vars['Obligacje_bond_detail']),
-            StockwatchIssuerScraper(self.client, self.database_handler, stockwatch_limiter, self.exit_event, self.progress_vars['StockWatch_issuer_detail'])
+            StockwatchIssuerListScraper(self.client, self.database_handler, stockwatch_limiter, self.exit_event, self.progress_vars['StockWatch_issuer_list']),
+            StockwatchIssuerBondScraper(self.client, self.database_handler, stockwatch_limiter, self.exit_event, self.progress_vars['StockWatch_issuer_bond']),
+            StockwatchIssuerFinanceScraper(self.client, self.database_handler, stockwatch_limiter, self.exit_event, self.progress_vars['StockWatch_issuer_finance'])
         ]
 
         scrappers[0].set_next_scraper('GPW_bond_detail', scrappers[1])
         scrappers[0].set_next_scraper('Obligacje_bond_detail', scrappers[2])
-        scrappers[0].set_next_scraper('StockWatch_issuer_detail', scrappers[3])
+
+        scrappers[3].set_next_scraper('StockWatch_issuer_bond', scrappers[4])
+        #scrappers[4].set_next_scraper('StockWatch_issuer_finance', scrappers[5])
 
         threads = [
             threading.Thread(target=asyncio.run, args=(scrapper.run(),) , name=f'{scrapper.__class__.__name__}')
@@ -63,6 +69,11 @@ class CombinedScraper:
             'obligacje-komunalne',
             'obligacje-skarbowe'
         ]]
+
+        while scrappers[0].is_working():
+            sleep(1)
+
+        asyncio.run(scrappers[3].put_todo('0'))
 
         while any([scrapper.is_working() for scrapper in scrappers]):
             sleep(1)

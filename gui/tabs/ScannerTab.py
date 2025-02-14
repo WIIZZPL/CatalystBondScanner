@@ -40,8 +40,7 @@ class ScannerTab(ttk.Frame):
             {'text': 'Oprocentowanie bierzące', 'anchor': 'e'},
             {'text': 'Oprocentowanie bazowe', 'anchor': 'e'},
             {'text': 'Typ oprocentowania'},
-            {'text': 'Indeks oprocentowania'},
-            {'text': 'Odsetki skumulowane', 'anchor': 'e'}
+            {'text': 'Indeks oprocentowania'}
         ]
         self.table = ttkbootstrap.tableview.Tableview(master=self.table_frame, coldata=coldata, autofit=True, searchable=True, delimiter=';', bootstyle=ttk.INFO)
         self.table.pack(side='left', fill='both', expand=True)
@@ -53,10 +52,8 @@ class ScannerTab(ttk.Frame):
         self.update_table()
 
     def update_table(self):
-        values = self.app.get_database_handler().select_bonds_view()
+        values = self.app.get_database_handler().select_bonds_table()
         rows = self.table.get_rows()
-
-
 
         has_changed = False
 

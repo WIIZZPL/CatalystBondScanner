@@ -5,7 +5,7 @@ from scraper.component_scrappers.BaseScraper import BaseScraper
 
 
 class ObligacjeBondScraper(BaseScraper):
-    async def item_to_url(self, item):
+    def item_to_url(self, item):
         return f'https://obligacje.pl/pl/obligacja/{item}'
 
     def parse(self, resource):

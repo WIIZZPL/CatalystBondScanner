@@ -64,12 +64,12 @@ class DatabaseHandler:
                 except sqlite3.Error as e:
                     logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname} \n {statement}')
 
-    def upsert_bond_list(self, bond_list):
+    def upsert_GPW_bond_list(self, bond_list):
         db_connection = sqlite3.connect(self.db_name)
         cursor = db_connection.cursor()
         logging.info("Upserting bond list")
 
-        with self.sql_scripts.joinpath('upsert', 'upsert_bond_list.sql').open('r') as script_file:
+        with self.sql_scripts.joinpath('upsert', 'upsert_GPW_bond_list.sql').open('r') as script_file:
             script = script_file.read()
             sql_returns = [0, 0, 0, 0, 0]
             for bond in bond_list:
@@ -83,10 +83,10 @@ class DatabaseHandler:
 
             logging.info('Upserted issuers: {}, markets: {}, instrument types: {}, bonds: {}, bond-markets: {}'.format(*sql_returns))
 
-    def select_bonds_view(self):
+    def select_bonds_table(self):
         db_connection = sqlite3.connect(self.db_name)
         cursor = db_connection.cursor()
-        with self.sql_scripts.joinpath('select', 'select_bonds_view.sql').open('r') as script_file:
+        with self.sql_scripts.joinpath('select', 'select_bonds_table.sql').open('r') as script_file:
             try:
                 result = cursor.execute(script_file.read()).fetchall()
                 return result
@@ -163,3 +163,18 @@ class DatabaseHandler:
                     db_connection.commit()
                 except sqlite3.Error as e:
                     logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname}\n{command.strip()}')
+
+    def upsert_sw_issuer_bonds(self, parsed_resource):
+        db_connection = sqlite3.connect(self.db_name)
+        cursor = db_connection.cursor()
+        logging.debug(f'Upserting {parsed_resource[1]} bonds from Stockwatch')
+
+        with self.sql_scripts.joinpath('upsert', 'upsert_sw_issuer_bonds.sql').open('r') as script_file:
+            script = script_file.read()
+            for bond_code in parsed_resource[0]:
+                for command in script_into_statements(script):
+                    try:
+                        result = cursor.execute(command.format(bond_code=bond_code, sw_code=parsed_resource[1]))
+                        db_connection.commit()
+                    except sqlite3.Error as e:
+                        logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname}\n{command.strip()}')
