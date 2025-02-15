@@ -1,8 +1,9 @@
 import asyncio
 import datetime
-from asyncio import Semaphore
+from threading import Semaphore
 from configparser import ConfigParser
 from importlib import resources
+from time import sleep
 
 
 class AsyncRateLimiter:
@@ -29,8 +30,8 @@ class AsyncRateLimiter:
 
         self.semaphore = Semaphore(self.max_connections)
 
-    async def __aenter__(self):
-        await self.semaphore.acquire()
+    def __enter__(self):
+        self.semaphore.acquire()
 
         while True:
             now = datetime.datetime.now()
@@ -38,7 +39,7 @@ class AsyncRateLimiter:
             if delta > self.timeout:
                 self.last_request_datetime = now
                 return
-            await asyncio.sleep((self.timeout-delta).total_seconds())
+            sleep((self.timeout-delta).total_seconds())
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self.semaphore.release()

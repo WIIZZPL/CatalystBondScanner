@@ -1,7 +1,4 @@
-import asyncio
 import re
-from time import sleep
-
 from bs4 import BeautifulSoup
 from scraper.component_scrappers.BaseScraper import BaseScraper
 
@@ -51,7 +48,7 @@ class GPWListScraper(BaseScraper):
 
         return result, True
 
-    async def save(self, parsed_resource):
+    def save(self, parsed_resource):
         self.database_handler.upsert_GPW_bond_list(parsed_resource)
-        [await self.next_scrapers['GPW_bond_detail'].put_todo(bond[1]) for bond in parsed_resource]
-        [await self.next_scrapers['Obligacje_bond_detail'].put_todo(bond[1]) for bond in parsed_resource]
+        [self.next_scrapers['GPW_bond_detail'].put_todo(bond[1]) for bond in parsed_resource]
+        [self.next_scrapers['Obligacje_bond_detail'].put_todo(bond[1]) for bond in parsed_resource]

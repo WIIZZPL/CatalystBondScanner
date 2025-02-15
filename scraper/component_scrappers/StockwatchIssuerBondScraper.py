@@ -40,10 +40,10 @@ class StockwatchIssuerBondScraper(BaseScraper):
 
         return (bonds, sw_code, fin_data_url), True
 
-    async def save(self, parsed_resource):
-        if len(parsed_resource[0]) or parsed_resource[1] or parsed_resource[2] is None:
+    def save(self, parsed_resource):
+        if len(parsed_resource[0]) == 0 or parsed_resource[1] is None or parsed_resource[2] is None:
             return
 
         self.database_handler.upsert_sw_issuer_bonds(parsed_resource)
 
-        #await self.next_scrapers['StockWatch_issuer_finance'].put_todo(parsed_resource[2])
+        self.next_scrapers['StockWatch_issuer_finance'].put_todo(parsed_resource[2])

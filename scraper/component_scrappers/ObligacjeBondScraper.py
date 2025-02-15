@@ -38,5 +38,5 @@ class ObligacjeBondScraper(BaseScraper):
 
         return (bond_code, is_secured, index_name, base_interest_rate, payment_dates, additional_info), True
 
-    async def save(self, parsed_resource):
+    def save(self, parsed_resource):
         self.database_handler.upsert_obligacje_bond_detail(parsed_resource)

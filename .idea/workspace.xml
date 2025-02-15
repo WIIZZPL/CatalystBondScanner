@@ -4,29 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment="Więcej danych&#10;Todo: Dane emitentów&#10;lepsza tablica&#10;AI!">
-      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_sw_issuer_bonds.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerBondScraper.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerFinanceScraper.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerListScraper.py" afterDir="false" />
+    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment="Dane początek danych do emitentów&#10;Todo: Threading&#10;lepsza tablica&#10;AI!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_access/DatabaseHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/DatabaseHandler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/create.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/create.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/drop.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/drop.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/select/select_bonds_view.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/select/select_bonds_table.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_bond_list.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_GPW_bond_list.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/tabs/ScannerTab.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/tabs/ScannerTab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/tabs/SyncTab.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/tabs/SyncTab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/AsyncRateLimiter.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/AsyncRateLimiter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/CombinedScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/CombinedScraper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/ConfigWriter.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/BaseScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/BaseScraper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/GPWBondScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/GPWBondScraper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/GPWListScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/GPWListScraper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/ObligacjeBondScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/ObligacjeBondScraper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerScraper.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/config.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerBondScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerBondScraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerFinanceScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerFinanceScraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerListScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/component_scrappers/StockwatchIssuerListScraper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739158308386</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Dane początek danych do emitentów&#10;Todo: Threading&#10;lepsza tablica&#10;AI!">
+      <option name="closed" value="true" />
+      <created>1739543303081</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1739543303081</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -217,6 +215,7 @@
     <MESSAGE value="table" />
     <MESSAGE value="Table update fixed,&#10;Database modified" />
     <MESSAGE value="Więcej danych&#10;Todo: Dane emitentów&#10;lepsza tablica&#10;AI!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Więcej danych&#10;Todo: Dane emitentów&#10;lepsza tablica&#10;AI!" />
+    <MESSAGE value="Dane początek danych do emitentów&#10;Todo: Threading&#10;lepsza tablica&#10;AI!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dane początek danych do emitentów&#10;Todo: Threading&#10;lepsza tablica&#10;AI!" />
   </component>
 </project>

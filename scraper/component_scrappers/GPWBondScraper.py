@@ -1,4 +1,3 @@
-import random
 import re
 from bs4 import BeautifulSoup
 from scraper.component_scrappers.BaseScraper import BaseScraper
@@ -43,5 +42,5 @@ class GPWBondScraper(BaseScraper):
 
         return (bond_code, maturity_date, par_value, issue_value, type_of_interest, current_interest_rate, accrued_interest), True
 
-    async def save(self, parsed_resource):
+    def save(self, parsed_resource):
         self.database_handler.upsert_gpw_bond_detail(parsed_resource)

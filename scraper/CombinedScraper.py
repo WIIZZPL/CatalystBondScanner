@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import threading
 import tkinter
@@ -20,7 +19,7 @@ class CombinedScraper:
     def __init__(self):
         self.database_handler :DatabaseHandler = None
         self.exit_event = threading.Event()
-        self.client = httpx.AsyncClient(headers={
+        self.client = httpx.Client(headers={
             'Connection': 'close',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Safari/537.36',
             'Accept-Language': 'en-US;q=0.5,en;q=0.3'
@@ -49,11 +48,11 @@ class CombinedScraper:
         scrappers[0].set_next_scraper('Obligacje_bond_detail', scrappers[2])
 
         scrappers[3].set_next_scraper('StockWatch_issuer_bond', scrappers[4])
-        #scrappers[4].set_next_scraper('StockWatch_issuer_finance', scrappers[5])
+        scrappers[4].set_next_scraper('StockWatch_issuer_finance', scrappers[5])
 
         threads = [
-            threading.Thread(target=asyncio.run, args=(scrapper.run(),) , name=f'{scrapper.__class__.__name__}')
-            for i, scrapper in enumerate(scrappers)
+            threading.Thread(target=scrapper.run, name=f'{scrapper.__class__.__name__}')
+            for scrapper in scrappers
         ]
 
         for thread in threads:
@@ -62,18 +61,18 @@ class CombinedScraper:
 
         self.database_handler.delete_bond_list()
 
-        [asyncio.run(scrappers[0].put_todo(item)) for item in [
-            'obligacje-korporacyjne',
-            'obligacje-spoldzielcze',
-            'listy-zastawne',
-            'obligacje-komunalne',
-            'obligacje-skarbowe'
+        [scrappers[0].put_todo(item) for item in [
+            'obligacje-korporacyjne'
+            # 'obligacje-spoldzielcze',
+            # 'listy-zastawne',
+            # 'obligacje-komunalne',
+            # 'obligacje-skarbowe'
         ]]
 
         while scrappers[0].is_working():
             sleep(1)
 
-        asyncio.run(scrappers[3].put_todo('0'))
+        scrappers[3].put_todo('0')
 
         while any([scrapper.is_working() for scrapper in scrappers]):
             sleep(1)

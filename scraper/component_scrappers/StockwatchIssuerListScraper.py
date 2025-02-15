@@ -28,9 +28,9 @@ class StockwatchIssuerListScraper(BaseScraper):
 
         return (urls, current_page_no, no_pages), True
 
-    async def save(self, parsed_resource):
+    def save(self, parsed_resource):
         if parsed_resource[1] < parsed_resource[2]:
-            await self.put_todo(parsed_resource[1])
+            self.put_todo(parsed_resource[1])
 
         for issuer_path in parsed_resource[0]:
-            await self.next_scrapers['StockWatch_issuer_bond'].put_todo(issuer_path)
+            self.next_scrapers['StockWatch_issuer_bond'].put_todo(issuer_path)
