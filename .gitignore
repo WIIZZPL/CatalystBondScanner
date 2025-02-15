@@ -1,3 +1,4 @@
 logs/
 *.db
 *.sqlite3
+/ai/data_sets/

@@ -66,9 +66,9 @@ class SyncTab(ttk.Frame):
         self.progress_bars['GPW_bond_list'] = ttk.Progressbar(self.bond_list_frame, variable=self.progress_vars['GPW_bond_list'], maximum=1, bootstyle='success')
         self.progress_bars['GPW_bond_list'].pack(fill='x', padx=10, pady=10)
 
-        self.progress_vars['StockWatch_issuer_list'] = ttk.DoubleVar()
-        self.progress_bars['StockWatch_issuer_list'] = ttk.Progressbar(self.bond_list_frame, variable=self.progress_vars['StockWatch_issuer_list'], maximum=1, bootstyle='success')
-        self.progress_bars['StockWatch_issuer_list'].pack(fill='x', padx=10, pady=10)
+        # self.progress_vars['StockWatch_issuer_list'] = ttk.DoubleVar()
+        # self.progress_bars['StockWatch_issuer_list'] = ttk.Progressbar(self.bond_list_frame, variable=self.progress_vars['StockWatch_issuer_list'], maximum=1, bootstyle='success')
+        # self.progress_bars['StockWatch_issuer_list'].pack(fill='x', padx=10, pady=10)
 
         self.bonds_frame = ttk.LabelFrame(self.middle_frame, text='Dane obligacji')
         self.bonds_frame.pack(fill='x', padx=10, pady=10)
@@ -81,16 +81,16 @@ class SyncTab(ttk.Frame):
         self.progress_bars['Obligacje_bond_detail'] = ttk.Progressbar(self.bonds_frame, variable=self.progress_vars['Obligacje_bond_detail'], maximum=1, bootstyle='success')
         self.progress_bars['Obligacje_bond_detail'].pack(fill='x', padx=10, pady=10)
 
-        self.issuers_frame = ttk.LabelFrame(self.middle_frame, text='Dane emitentów')
-        self.issuers_frame.pack(fill='x', padx=10, pady=10)
+        # self.issuers_frame = ttk.LabelFrame(self.middle_frame, text='Dane emitentów')
+        # self.issuers_frame.pack(fill='x', padx=10, pady=10)
 
-        self.progress_vars['StockWatch_issuer_bond'] = ttk.DoubleVar()
-        self.progress_bars['StockWatch_issuer_bond'] = ttk.Progressbar(self.issuers_frame, variable=self.progress_vars['StockWatch_issuer_bond'], maximum=1, bootstyle='success')
-        self.progress_bars['StockWatch_issuer_bond'].pack(fill='x', padx=10, pady=10)
-
-        self.progress_vars['StockWatch_issuer_finance'] = ttk.DoubleVar()
-        self.progress_bars['StockWatch_issuer_finance'] = ttk.Progressbar(self.issuers_frame, variable=self.progress_vars['StockWatch_issuer_finance'], maximum=1, bootstyle='success')
-        self.progress_bars['StockWatch_issuer_finance'].pack(fill='x', padx=10, pady=10)
+        # self.progress_vars['StockWatch_issuer_bond'] = ttk.DoubleVar()
+        # self.progress_bars['StockWatch_issuer_bond'] = ttk.Progressbar(self.issuers_frame, variable=self.progress_vars['StockWatch_issuer_bond'], maximum=1, bootstyle='success')
+        # self.progress_bars['StockWatch_issuer_bond'].pack(fill='x', padx=10, pady=10)
+        #
+        # self.progress_vars['StockWatch_issuer_finance'] = ttk.DoubleVar()
+        # self.progress_bars['StockWatch_issuer_finance'] = ttk.Progressbar(self.issuers_frame, variable=self.progress_vars['StockWatch_issuer_finance'], maximum=1, bootstyle='success')
+        # self.progress_bars['StockWatch_issuer_finance'].pack(fill='x', padx=10, pady=10)
 
         #bottom frame
 

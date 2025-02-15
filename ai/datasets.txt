@@ -1,0 +1,24 @@
+Sources for datasets:
+
+The data ought to be downloaded in the .csv format for the full time period available.
+
+Polish monthly Y/Y CPI:
+https://stooq.com/q/d/?s=cpiypl.m
+
+Polish monthly unemployment rate:
+https://stooq.com/q/d/?s=unrtpl.m
+
+Polish quarterly Y/Y GDP:
+https://stooq.com/q/d/?s=gdpypl.m
+
+Daily WIBOR 3M:
+https://stooq.com/q/d/?s=plopln3m
+
+Daily WIBOR 6M:
+https://stooq.com/q/d/?s=plopln6m
+
+Monthly EURIBOR 3M:
+https://data.ecb.europa.eu/data/datasets/FM/FM.M.U2.EUR.RT.MM.EURIBOR3MD_.HSTA
+
+Monthly EURIBOR 6M:
+https://data.ecb.europa.eu/data/datasets/FM/FM.M.U2.EUR.RT.MM.EURIBOR6MD_.HSTA
