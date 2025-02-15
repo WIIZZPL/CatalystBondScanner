@@ -16,14 +16,14 @@ CREATE TABLE IF NOT EXISTS issuer_financials (
     multiple          VARCHAR(8)     NOT NULL,
     year              INTEGER        NOT NULL,
     quarter           INTEGER        CHECK (quarter IN (1, 2, 3, 4)),
-    #market_cap        INTEGER,
+    market_cap        INTEGER,
     cur_ass           INTEGER,
-    #total_ass         INTEGER,
+    total_ass         INTEGER,
     cur_liab          INTEGER,
-    #total_liab        INTEGER,
-    #retained_earnings INTEGER,
-    #operating_profit  INTEGER,
-    #net_profit        INTEGER
+    total_liab        INTEGER,
+    retained_earnings INTEGER,
+    operating_profit  INTEGER,
+    net_profit        INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS instrument_types (
