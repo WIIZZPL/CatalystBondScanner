@@ -1,7 +1,10 @@
 import pandas as pd
 from matplotlib import pyplot as plt
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from statsmodels.tsa.stattools import adfuller
 
-def get_data(frequency = 'ME', interpolation_method = 'linear', order = 3, show_data = False):
+
+def get_data(frequency = 'ME', interpolation_method = 'linear', order = 3, show_data = False) -> pd.DataFrame:
     euribor3m_data = pd.read_csv('data_sets/euribor3m.csv').iloc[:, [0, 2]]
     euribor3m_data.columns = ['DATE', 'EURIBOR 3M']
 
@@ -49,16 +52,35 @@ def get_data(frequency = 'ME', interpolation_method = 'linear', order = 3, show_
 
         interpolated_dataset = resampled_dataset.interpolate(method=interpolation_method, order=order)
 
+        #TODO residuals
+
         data = pd.merge(data, interpolated_dataset, how='left', left_index=True, right_index=True)
 
     if show_data:
-        print(data)
+        print(data.head())
         print(f'Values range from {newest_past} to {oldest_recent}')
         print(f'Missing data has been interpolated using the {interpolation_method} method of order {order}')
 
-        plt.plot(data)
-        plt.legend(data.columns)
+        fig, axs = plt.subplots(nrows=3, ncols=data.shape[1])
+        for i in range(data.shape[1]):
+            column_data = data.iloc[:, i]
+            axs[0, i].plot(column_data)
+            axs[0, i].title.set_text(column_data.name)
+            plot_acf(column_data, ax=axs[1, i], lags=300)
+            plot_pacf(column_data, ax=axs[2, i])
+
+            dftest = adfuller(column_data, autolag='AIC')
+            print(f'\nADF TEST FOR {column_data.name}')
+            print(f'ADF {dftest[0]}')
+            print(f'P-VALUE {dftest[1]}')
+            print(f'NUM OF LAGS {dftest[2]}')
+
         plt.show()
 
+    return data
+
 if __name__ == '__main__':
+    pd.options.display.max_columns = None
+    pd.options.display.max_rows = None
+    pd.options.display.expand_frame_repr = False
     get_data(show_data=True)

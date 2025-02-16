@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment="Poprawienie create.sql">
-      <change afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ai/MonthlyTrainer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ai/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ai/datasets.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment="Data preprocessor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/tabs/SyncTab.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/tabs/SyncTab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scraper/CombinedScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/CombinedScraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai/DataPreprocessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/DataFormatter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai/MonthlyModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/MonthlyModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +51,10 @@
     "Python.AsyncRateLimiter.executor": "Run",
     "Python.CatalystBondScanner.executor": "Run",
     "Python.ConfigWriter.executor": "Run",
+    "Python.DataFormatter.executor": "Run",
+    "Python.DataPreProcessor.executor": "Run",
+    "Python.DataPreprocessor.executor": "Run",
+    "Python.MonthlyModel.executor": "Run",
     "Python.MonthlyTrainer.executor": "Run",
     "Python.SplicedTrainer.executor": "Run",
     "Python.main.executor": "Run",
@@ -76,11 +76,11 @@
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\db_access\sql_scripts\update" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\ai" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\scraper\component_scrappers" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\gui\tabs" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\db_access\sql_scripts" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\db_access\sql_scripts\creates" />
-      <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\gui" />
     </key>
   </component>
   <component name="RunManager">
@@ -204,7 +204,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739622841112</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Data preprocessor">
+      <option name="closed" value="true" />
+      <created>1739653610506</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1739653610506</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -234,6 +242,7 @@
     <MESSAGE value="Dane początek danych do emitentów&#10;Todo: Threading&#10;lepsza tablica&#10;AI!" />
     <MESSAGE value="Dorobiony threading, początek pobierania finansów, czy na pewno?&#10;Todo:&#10;lepsza tablica&#10;AI!" />
     <MESSAGE value="Poprawienie create.sql" />
-    <option name="LAST_COMMIT_MESSAGE" value="Poprawienie create.sql" />
+    <MESSAGE value="Data preprocessor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Data preprocessor" />
   </component>
 </project>
