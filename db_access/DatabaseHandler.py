@@ -2,7 +2,6 @@ import datetime
 import logging
 import sqlite3
 from importlib import resources
-from . import sql_scripts
 
 
 def script_into_statements(script: str) -> [str]:

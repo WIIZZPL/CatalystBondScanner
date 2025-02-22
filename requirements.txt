@@ -5,3 +5,6 @@ httpx~=0.28.1
 beautifulsoup4~=4.13.3
 pandas~=2.2.3
 matplotlib~=3.10.0
+numpy~=2.0.2
+tensorflow~=2.18.0
+statsmodels~=0.14.4

@@ -45,7 +45,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\ai\wibor3m.csv">
+        <entry key="\ai\train.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

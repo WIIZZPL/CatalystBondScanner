@@ -37,7 +37,6 @@ class HomeTab(ttk.Frame):
         self.last_update_date_label.pack(side='left')
 
         self.update_button = ttk.Button(self.update_frame, text='Aktualizuj', command=lambda:self.master.master.switch_and_sync(), bootstyle=ttk.INFO)
-        self.update_button.pack(padx=10)
 
     def on_tab_show(self):
         # last modify date update
@@ -46,14 +45,15 @@ class HomeTab(ttk.Frame):
         if last_modified_date is None:
             self.last_update_date_label.configure(bootstyle='inverse-danger')
             self.last_update_date_label['text'] = 'NIGDY'
+            self.update_button.pack(padx=10)
         else:
             self.last_update_date_label['text'] = last_modified_date
             days_diff = abs((last_modified_date - datetime.date.today()).days)
 
             if days_diff != 0:
-                self.update_button.forget()
-            else:
                 self.update_button.pack(padx=10)
+            else:
+                self.update_button.forget()
 
             if days_diff < 7:
                 self.last_update_date_label.config(bootstyle='inverse-success')

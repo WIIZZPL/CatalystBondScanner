@@ -33,7 +33,7 @@ class CombinedScraper:
         self.exit_event.clear()
         gpw_limiter = AsyncRateLimiter('gpwcatalyst.pl')
         obligacje_limiter = AsyncRateLimiter('obligacje.pl')
-        stockwatch_limiter = AsyncRateLimiter('stockwatch.pl')
+        #stockwatch_limiter = AsyncRateLimiter('stockwatch.pl')
 
         scrappers = [
             GPWListScraper(self.client, self.database_handler, gpw_limiter, self.exit_event, self.progress_vars['GPW_bond_list']),

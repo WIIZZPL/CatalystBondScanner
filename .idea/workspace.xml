@@ -4,11 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment="Data preprocessor">
+    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment="Data formatter, some added stuff to it&#10;TODO:&#10;Residuals">
+      <change afterPath="$PROJECT_DIR$/ai/CBSModel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ai/DataPreprocessor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ai/DataSplitter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/CatalystBondScanner.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CatalystBondScanner.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/csv-editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ai/DataPreprocessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/DataFormatter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ai/MonthlyModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/MonthlyModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai/DataFormatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/DataFormatter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai/MonthlyModel.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_access/DatabaseHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/DatabaseHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/create.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/create.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/tabs/HomeTab.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/tabs/HomeTab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/AsyncRateLimiter.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/AsyncRateLimiter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scraper/CombinedScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper/CombinedScraper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,11 +59,13 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.AsyncRateLimiter.executor": "Run",
+    "Python.CBSModel.executor": "Run",
     "Python.CatalystBondScanner.executor": "Run",
     "Python.ConfigWriter.executor": "Run",
     "Python.DataFormatter.executor": "Run",
     "Python.DataPreProcessor.executor": "Run",
     "Python.DataPreprocessor.executor": "Run",
+    "Python.DataSplitter.executor": "Run",
     "Python.MonthlyModel.executor": "Run",
     "Python.MonthlyTrainer.executor": "Run",
     "Python.SplicedTrainer.executor": "Run",
@@ -63,7 +75,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/WIIZZ/Documents/Repos/CatalystBondScanner/ai",
+    "last_opened_file_path": "C:/Users/WIIZZ/Documents/Repos/CatalystBondScanner",
     "settings.editor.selected.configurable": "editor.preferences.tabs"
   }
 }]]></component>
@@ -212,7 +224,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739653610506</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Data formatter, some added stuff to it&#10;TODO:&#10;Residuals">
+      <option name="closed" value="true" />
+      <created>1739671928928</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1739671928928</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -243,6 +263,7 @@
     <MESSAGE value="Dorobiony threading, początek pobierania finansów, czy na pewno?&#10;Todo:&#10;lepsza tablica&#10;AI!" />
     <MESSAGE value="Poprawienie create.sql" />
     <MESSAGE value="Data preprocessor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Data preprocessor" />
+    <MESSAGE value="Data formatter, some added stuff to it&#10;TODO:&#10;Residuals" />
+    <option name="LAST_COMMIT_MESSAGE" value="Data formatter, some added stuff to it&#10;TODO:&#10;Residuals" />
   </component>
 </project>

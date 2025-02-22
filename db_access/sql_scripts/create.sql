@@ -10,22 +10,6 @@ CREATE TABLE IF NOT EXISTS issuers (
     is_public_issuer  BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS issuer_financials (
-    id                INTEGER        PRIMARY KEY,
-    issuer_id         INTEGER        REFERENCES issuer_id(id),
-    multiple          VARCHAR(8)     NOT NULL,
-    year              INTEGER        NOT NULL,
-    quarter           INTEGER        CHECK (quarter IN (1, 2, 3, 4)),
-    market_cap        INTEGER,
-    cur_ass           INTEGER,
-    total_ass         INTEGER,
-    cur_liab          INTEGER,
-    total_liab        INTEGER,
-    retained_earnings INTEGER,
-    operating_profit  INTEGER,
-    net_profit        INTEGER
-);
-
 CREATE TABLE IF NOT EXISTS instrument_types (
     id                INTEGER        PRIMARY KEY,
     name              VARCHAR(64)    NOT NULL UNIQUE
@@ -56,7 +40,7 @@ CREATE TABLE IF NOT EXISTS bonds (
     currency_code     VARCHAR(3),
     c_interest_rate   DECIMAL(3, 4),
     base_interest     DECIMAL(3, 4),
-    interest_type_id  INTEGER        REFERENCES instrument_types(id),
+    interest_type_id  INTEGER        REFERENCES interest_types(id),
     index_id          INTEGER        REFERENCES indexes(id),
     accrued_interest  DECIMAL(10, 2),
     issue_value       INTEGER        CHECK (issue_value > 0),
