@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
@@ -39,16 +40,16 @@ class DataPreprocessor:
             raise Exception("Gap between dates too wide, reverse differential impossible")
 
         # Standardisation
-        data_to_inverse = pd.DataFrame(self.scaler.inverse_transform(data_to_inverse), columns=data_to_inverse.columns, index=data_to_inverse.index)
+        data_to_inverse = pd.DataFrame(self.scaler.inverse_transform(data_to_inverse.astype(np.float64)), columns=data_to_inverse.columns, index=data_to_inverse.index)
         # Month average
         data_to_inverse['MONTH'] = data_to_inverse.index.month
         data_to_inverse['UNRATE'] = data_to_inverse['UNRATE'] + data_to_inverse.index.map(lambda d: self.month_unrate_avg.loc[d.month])
         data_to_inverse = data_to_inverse.drop(columns=['MONTH'])
 
         # Differential
-        for column in data_to_inverse.columns:
-            if column in ['EURIBOR 3M', 'EURIBOR 6M', 'WIBOR 3M', 'WIBOR 6M', 'UNRATE']:
-                data_to_inverse[column] = pd.concat([self.original_data[[column]].iloc[:0], data_to_inverse[[column]]]).cumsum()
+        d = data_to_inverse.index[0]
+        data_to_inverse.loc[d, ['EURIBOR 3M', 'EURIBOR 6M', 'WIBOR 3M', 'WIBOR 6M', 'UNRATE']] += self.original_data.shift(1).loc[d, ['EURIBOR 3M', 'EURIBOR 6M', 'WIBOR 3M', 'WIBOR 6M', 'UNRATE']]
+        data_to_inverse[['EURIBOR 3M', 'EURIBOR 6M', 'WIBOR 3M', 'WIBOR 6M', 'UNRATE']] = data_to_inverse[['EURIBOR 3M', 'EURIBOR 6M', 'WIBOR 3M', 'WIBOR 6M', 'UNRATE']].cumsum()
 
         return data_to_inverse
 

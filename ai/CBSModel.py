@@ -11,39 +11,25 @@ from ai.DataSplitter import data_splitter
 
 
 class CBSModel(keras.Model):
-    def __init__(self, prediction_count):
+    def __init__(self, history_len=12, features_count=7):
         super().__init__()
-        self.prediction_count = prediction_count
+        self.history_len = history_len
+        self.features_count = features_count
 
-        self.lstm_cell_1 = keras.layers.LSTMCell(32)
-        self.lstm_rnn_1 = keras.layers.RNN(self.lstm_cell_1, return_state=True)
-        #self.lstm_cell_2 = keras.layers.LSTMCell(32)
-        #self.lstm_rnn_2 = keras.layers.RNN(self.lstm_cell_2, return_state=True)
-        #self.dense_1 = keras.layers.Dense(16)
-        self.out_layer = keras.layers.Dense(7)
+        self.rnn_1 = keras.layers.LSTM(32, return_sequences=True)
+        self.rnn_2 = keras.layers.LSTM(32)
+        self.dense_1 = keras.layers.Dense(16, activation=keras.activations.tanh)
+        self.out_layer = keras.layers.Dense(features_count, activation=keras.activations.sigmoid)
 
-    def warmup(self, x):
-        x, *state_1 = self.lstm_rnn_1(x)
-        #x, *state_2 = self.lstm_rnn_2(x)
-        #x = self.dense_1(x)
+    def call(self, x):
+
+        x = self.rnn_1(x)
+        x = self.rnn_2(x)
+        x = self.dense_1(x)
         x = self.out_layer(x)
-        return x, state_1, None
 
-    def call(self, x, training=None):
-        predictions = []
+        return x
 
-        x, state_1, state_2 = self.warmup(x)
-        predictions.append(x)
-
-        for _ in range(1, self.prediction_count):
-            x, state_1 = self.lstm_cell_1(x, states=state_1, training=training)
-            #x, state_2 = self.lstm_cell_2(x, states=state_2, training=training)
-            #x = self.dense_1(x)
-            x = self.out_layer(x)
-
-            predictions.append(x)
-
-        return tf.transpose(tf.stack(predictions), [1, 0, 2])
 
 fig_colours = {
     'EURIBOR 3M': 'tab:blue',
@@ -79,8 +65,12 @@ def graph_ba_transform(p_data):
     plt.show()
 
 def graph_loss(history):
-    plt.plot(history.history['loss'], label='loss')
-    plt.plot(history.history['val_loss'], label='val loss')
+    for k in history.history.keys():
+        if 'val_' in k:
+            continue
+        plt.plot(history.history[k], label=k)
+        plt.plot(history.history[f'val_{k}'], label=f'val {k}', ls='--')
+    plt.legend()
     plt.show()
 
 def graph_prediction(actual, future, xlim=None, ylim=None, ticks=None):
@@ -115,11 +105,13 @@ if __name__ == '__main__':
     pd.options.display.max_rows = None
     pd.options.display.expand_frame_repr = False
 
-    TRAIN_PERCENTAGE = 0.9
-    HISTORY_COUNT = 1
+    TRAIN_PERCENTAGE = 0.50
+    HISTORY_COUNT = 12 * 1
     PREDICTION_COUNT = 12
-    EPOCHS = 10
-    LOSS = 'mse'
+    EPOCHS = 200
+
+    LOSS = keras.losses.mean_squared_error
+    OPTIMIZER = keras.optimizers.Adam()
 
     data = get_data()
     print('Data table:')
@@ -127,64 +119,43 @@ if __name__ == '__main__':
 
     data_preprocessor = DataPreprocessor()
     p_data = data_preprocessor.fit_transform(data)
+    # p_data = data.copy()
 
     print('Transformed data:')
     print(p_data.head())
 
     # graph_ba_transform(p_data)
 
-    train_data_row_count = int(len(p_data)*TRAIN_PERCENTAGE)
-    train_data = np.array(p_data[:train_data_row_count])
-    test_data = np.array(p_data[train_data_row_count:])
+    train_data_x, train_data_y, test_data_x, test_data_y = data_splitter(p_data, HISTORY_COUNT, TRAIN_PERCENTAGE)
 
-    train_data = np.reshape(train_data, (train_data.shape[0], 1, train_data.shape[1]))
-    test_data = np.reshape(test_data, (test_data.shape[0], 1, test_data.shape[1]))
+    model = CBSModel()
 
-    # train_data_x, train_data_y = data_splitter(train_data, HISTORY_COUNT, PREDICTION_COUNT)
-    # test_data_x, test_data_y = data_splitter(test_data, HISTORY_COUNT, PREDICTION_COUNT)
+    model.compile(loss=LOSS, optimizer=OPTIMIZER)
 
-    model = CBSModel(prediction_count=PREDICTION_COUNT)
+    history = model.fit(train_data_x, train_data_y, validation_data=(test_data_x, test_data_y), epochs=EPOCHS)
 
-    model.compile(loss=LOSS, optimizer=keras.optimizers.Adam())
-    history = model.fit(train_data, train_data, validation_data=(test_data, test_data), epochs=EPOCHS)
+    graph_loss(history)
 
-    model.summary()
+    y = model.predict(train_data_x)
 
-    # graph_loss(history)
-
-    y = model.predict(train_data)
-
-    print(y.shape)
-
-    # graph_prediction(p_data, y, ylim=[0, 1])
-
-    future_data = pd.DataFrame(y[:, 0])
-    for i in y[-1, 1:]:
-        future_data.loc[len(future_data)] = i
+    future_data = pd.DataFrame(y)
 
     future_data.columns = p_data.columns
 
     first_train_date = p_data.index[0]
+
+    train_data_row_count = train_data_x.shape[0] + train_data_x.shape[1]
     last_train_date = p_data.index[train_data_row_count-1]
 
     first_prediction_date = first_train_date + pd.DateOffset(months=HISTORY_COUNT)
-    last_prediction_date = first_prediction_date + pd.DateOffset(months=y.shape[0]+y.shape[1]-1)
-
-    print(first_train_date)
-    print(last_train_date)
-    print(first_prediction_date)
-    print(last_prediction_date)
-    print(y.shape[0]+y.shape[1]-1)
+    last_prediction_date = first_prediction_date + pd.DateOffset(months=y.shape[0]-1)
 
     index = pd.date_range(start=first_prediction_date,
                           end=last_prediction_date,
-                          freq='ME')[:-1]
+                          freq='ME')
 
     future_data.index = index
 
     future_data = data_preprocessor.inverse_transform(future_data)
 
-    print(data)
-    print(future_data)
-
-    graph_prediction(data, future_data, ticks=[first_train_date, last_train_date, first_prediction_date, last_prediction_date])
+    graph_prediction(data, future_data, xlim=[first_train_date, last_prediction_date], ticks=[first_train_date, last_train_date, first_prediction_date, last_prediction_date])

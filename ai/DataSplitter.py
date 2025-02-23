@@ -1,27 +1,27 @@
 import numpy as np
+import pandas as pd
 
 
-def data_splitter(input_data :np.ndarray, history_size:int, prediction_size:int) -> (np.ndarray, np.ndarray):
+def data_splitter(input_data :pd.DataFrame, history_size:int, train_size:float) -> (np.ndarray, np.ndarray, np.ndarray, np.ndarray):
 
-    histories = []
-    predictions = []
+    train_data_row_count = int(len(input_data) * train_size)
+    train_data = np.array(input_data[:train_data_row_count])
+    test_data = np.array(input_data[train_data_row_count:])
 
-    larger_size = max(history_size, prediction_size)
+    train_data_x = []
+    train_data_y = []
+    test_data_x = []
+    test_data_y = []
 
-    for i in range(len(input_data)-larger_size*2+1):
-        histories.append(input_data[i:i+larger_size])
-        predictions.append(input_data[i+larger_size:i+larger_size*2])
+    for i in range(history_size, len(train_data)):
+        train_data_x.append(train_data[i - history_size:i])
+        train_data_y.append(train_data[i])
 
-    return np.stack(histories), np.stack(predictions)
+    for i in range(history_size, len(test_data)):
+        test_data_x.append(test_data[i - history_size:i])
+        test_data_y.append(test_data[i])
 
-inp = [[11, 12, 13, 14, 15, 16, 17],
-       [21, 22, 23, 24, 25, 26, 27],
-       [31, 32, 33, 34, 35, 36, 37],
-       [41, 42, 43, 44, 45, 46, 47],
-       [51, 52, 53, 54, 55, 56, 57],
-       [61, 62, 63, 64, 65, 66, 67],
-       [71, 72, 73, 74, 75, 76, 77],
-       [81, 82, 83, 84, 85, 86, 87],
-       [91, 92, 93, 94, 95, 96, 97]]
+    train_data_x, train_data_y = np.array(train_data_x), np.array(train_data_y)
+    test_data_x, test_data_y = np.array(test_data_x), np.array(test_data_y)
 
-data_splitter(np.array(inp), 3, 3)
+    return train_data_x, train_data_y, test_data_x, test_data_y
