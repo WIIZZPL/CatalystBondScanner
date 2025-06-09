@@ -8,3 +8,5 @@ matplotlib~=3.10.0
 numpy~=2.0.2
 tensorflow~=2.18.0
 statsmodels~=0.14.4
+keras~=3.8.0
+scikit-learn~=1.6.1
