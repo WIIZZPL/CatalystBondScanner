@@ -2,3 +2,5 @@ logs/
 *.db
 *.sqlite3
 /ai/data_sets/
+*.pkl
+*.weights.h5

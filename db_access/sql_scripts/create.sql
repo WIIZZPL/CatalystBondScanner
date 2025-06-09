@@ -25,6 +25,14 @@ CREATE TABLE IF NOT EXISTS indexes(
     name              VARCHAR(16)    NOT NULL UNIQUE
 );
 
+CREATE TABLE IF NOT EXISTS index_rates (
+    date              DATE           NOT NULL,
+    index_name_id     INTEGER        REFERENCES indexes(id) NOT NULL,
+    is_historical     BOOLEAN        NOT NULL,
+    rate              DECIMAL        NOT NULL,
+    PRIMARY KEY (date, index_name_id)
+);
+
 CREATE TABLE IF NOT EXISTS bond_payment_dates(
     bond_id           INTEGER        REFERENCES bonds(id),
     date              DATE,
@@ -42,7 +50,7 @@ CREATE TABLE IF NOT EXISTS bonds (
     base_interest     DECIMAL(3, 4),
     interest_type_id  INTEGER        REFERENCES interest_types(id),
     index_id          INTEGER        REFERENCES indexes(id),
-    accrued_interest  DECIMAL(10, 2),
+    accrued_interest  DECIMAL(10, 2) DEFAULT 0 NOT NULL,
     issue_value       INTEGER        CHECK (issue_value > 0),
     maturity_date     DATE,
     is_secured        BOOLEAN,
@@ -71,6 +79,8 @@ CREATE VIEW IF NOT EXISTS bonds_view AS
         bonds.currency_code AS currency_code,
         bond_markets.price AS bond_market_price,
         markets.name AS market_name,
+        (bonds.par_value*bonds.c_interest_rate)/(bonds.par_value*bond_markets.price+bonds.accrued_interest) AS current_yield,
+        0 AS YTM_yield,
         bonds.c_interest_rate AS current_interest,
         bonds.base_interest AS base_interest,
         interest_types.name AS interest_type_name,

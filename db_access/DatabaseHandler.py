@@ -177,3 +177,20 @@ class DatabaseHandler:
                         db_connection.commit()
                     except sqlite3.Error as e:
                         logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname}\n{command.strip()}')
+
+    def upsert_index_rates(self, rates, historical):
+        db_connection = sqlite3.connect(self.db_name)
+        cursor = db_connection.cursor()
+
+        historical = 1 if historical else 0
+
+        with self.sql_scripts.joinpath('upsert', 'upsert_index_rates.sql').open('r') as script_file:
+            script = script_file.read()
+            for i in range(len(rates)):
+                for column in rates.columns[:4]:
+                    payload = script.format(date=rates.index[i], index_name=column, is_historical=historical, rate=rates.iloc[i][column])
+                    try:
+                        result = cursor.execute(payload)
+                        db_connection.commit()
+                    except sqlite3.Error as e:
+                        logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname}\n{payload.strip()}')

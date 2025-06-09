@@ -4,11 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment=":(">
+    <list default="true" id="cce9f79c-523f-4867-9f5a-f731624099d6" name="Changes" comment=":)">
+      <change afterPath="$PROJECT_DIR$/db_access/sql_scripts/upsert/upsert_index_rates.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/csv-editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ai/CBSModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/CBSModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai/DataFormatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/DataFormatter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ai/DataPreprocessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/DataPreprocessor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ai/DataSplitter.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/DataSplitter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_access/DatabaseHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/DatabaseHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/create.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/create.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/drop.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/drop.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db_access/sql_scripts/select/select_bonds_table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db_access/sql_scripts/select/select_bonds_table.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/tabs/ScannerTab.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/tabs/ScannerTab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/tabs/SyncTab.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/tabs/SyncTab.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,29 +57,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.AsyncRateLimiter.executor": "Run",
-    "Python.CBSModel.executor": "Run",
-    "Python.CatalystBondScanner.executor": "Run",
-    "Python.ConfigWriter.executor": "Run",
-    "Python.DataFormatter.executor": "Run",
-    "Python.DataPreProcessor.executor": "Run",
-    "Python.DataPreprocessor.executor": "Debug",
-    "Python.DataSplitter.executor": "Run",
-    "Python.MonthlyModel.executor": "Run",
-    "Python.MonthlyTrainer.executor": "Run",
-    "Python.SplicedTrainer.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/WIIZZ/Documents/Repos/CatalystBondScanner",
-    "settings.editor.selected.configurable": "editor.preferences.tabs"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.AsyncRateLimiter.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CBSModel.executor&quot;: &quot;Run&quot;,
+    &quot;Python.CatalystBondScanner.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ConfigWriter.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DataFormatter.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DataPreProcessor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DataPreprocessor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DataSplitter.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MonthlyModel.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MonthlyTrainer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SplicedTrainer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/WIIZZ/Documents/Repos/CatalystBondScanner&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\ai" />
@@ -78,11 +89,11 @@
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\db_access\sql_scripts\update" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\ai" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\scraper\component_scrappers" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\gui\tabs" />
       <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\db_access\sql_scripts" />
-      <recent name="C:\Users\WIIZZ\Documents\Repos\CatalystBondScanner\db_access\sql_scripts\creates" />
     </key>
   </component>
   <component name="RunManager">
@@ -230,7 +241,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740251779497</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary=":)">
+      <option name="closed" value="true" />
+      <created>1740278365775</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1740278365775</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -263,6 +282,7 @@
     <MESSAGE value="Data preprocessor" />
     <MESSAGE value="Data formatter, some added stuff to it&#10;TODO:&#10;Residuals" />
     <MESSAGE value=":(" />
-    <option name="LAST_COMMIT_MESSAGE" value=":(" />
+    <MESSAGE value=":)" />
+    <option name="LAST_COMMIT_MESSAGE" value=":)" />
   </component>
 </project>

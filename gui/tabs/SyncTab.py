@@ -1,19 +1,26 @@
 import datetime
 import logging
+import pickle
 import random
 import threading
 import time
 import tkinter
 from threading import Thread, Event
 
+import numpy as np
+import pandas as pd
 import ttkbootstrap as ttk
 from PIL.ImageTk import PhotoImage
 from pytablericons import TablerIcons, OutlineIcon
 
+from ai import CBSModel, get_data
 from db_access import DatabaseHandler
 from gui import CatalystBondScanner
 from scraper.CombinedScraper import CombinedScraper
 
+CBSModel_name = 'CBSModel-20250608124145.model.weights.h5'
+CBSModel_DP_name = 'CBSModel_DataPreprocessor-20250608124145.pkl'
+future_len = 60
 
 class SyncTab(ttk.Frame):
 
@@ -157,7 +164,36 @@ class SyncTab(ttk.Frame):
 
     def sync_run(self):
         #TODO: SYNC & ABORT
-        self.scraper.start()
+
+        # self.scraper.start()
+
+        model = CBSModel(future_len=future_len)
+        data_preprocessor = None
+        with open(CBSModel_DP_name, 'rb') as inp:
+            data_preprocessor = pickle.load(inp)
+
+        historical_df = get_data()
+        historical_p = data_preprocessor.transform(historical_df)
+        model.predict(historical_p.to_numpy()[np.newaxis, ...])
+        model.load_weights(CBSModel_name)
+        predictions = model.predict(historical_p.to_numpy()[np.newaxis, ...])
+
+        future_df = pd.DataFrame(predictions[0, :, :])
+        future_df.columns = historical_df.columns
+
+        last_data_date = historical_df.index[-1]
+        first_future_date = last_data_date + pd.DateOffset(months=1)
+        last_future_date = first_future_date + pd.DateOffset(months=future_len - 1)
+
+        future_df.index = pd.date_range(start=first_future_date, end=last_future_date, freq='ME')
+
+        total_data = data_preprocessor.inverse_transform(pd.concat([historical_p, future_df]))
+
+        future_df = total_data.tail(future_len)
+
+        db_handler = self.app.get_database_handler()
+        db_handler.upsert_index_rates(historical_df, historical=True)
+        db_handler.upsert_index_rates(future_df, historical=False)
 
     def purge_database(self):
         #TODO: Okno dialogowe "czy na pewno?"

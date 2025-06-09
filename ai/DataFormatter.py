@@ -3,28 +3,30 @@ from matplotlib import pyplot as plt
 from matplotlib import ticker
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from statsmodels.tsa.stattools import adfuller
-
+from importlib import resources
 
 def get_data(frequency = 'ME', interpolation_method = 'linear', order = 3, show_data = False) -> pd.DataFrame:
-    euribor3m_data = pd.read_csv('data_sets/euribor3m.csv').iloc[:, [0, 2]]
+    data_sets_folder = resources.files('ai').joinpath('data_sets')
+
+    euribor3m_data = pd.read_csv(data_sets_folder.joinpath('euribor3m.csv')).iloc[:, [0, 2]]
     euribor3m_data.columns = ['DATE', 'EURIBOR 3M']
 
-    euribor6m_data = pd.read_csv('data_sets/euribor6m.csv').iloc[:, [0, 2]]
+    euribor6m_data = pd.read_csv(data_sets_folder.joinpath('euribor6m.csv')).iloc[:, [0, 2]]
     euribor6m_data.columns = ['DATE', 'EURIBOR 6M']
 
-    wibor3m_data = pd.read_csv('data_sets/wibor3m.csv').iloc[:, [0, 4]]
+    wibor3m_data = pd.read_csv(data_sets_folder.joinpath('wibor3m.csv')).iloc[:, [0, 4]]
     wibor3m_data.columns = ['DATE', 'WIBOR 3M']
 
-    wibor6m_data = pd.read_csv('data_sets/wibor6m.csv').iloc[:, [0, 4]]
+    wibor6m_data = pd.read_csv(data_sets_folder.joinpath('wibor6m.csv')).iloc[:, [0, 4]]
     wibor6m_data.columns = ['DATE', 'WIBOR 6M']
 
-    cpi_data = pd.read_csv('data_sets/pl_cpi.csv').iloc[:, [0, 4]]
+    cpi_data = pd.read_csv(data_sets_folder.joinpath('pl_cpi.csv')).iloc[:, [0, 4]]
     cpi_data.columns = ['DATE', 'CPI Y/Y']
 
-    gdp_data = pd.read_csv('data_sets/pl_gdp.csv').iloc[:, [0, 4]]
+    gdp_data = pd.read_csv(data_sets_folder.joinpath('pl_gdp.csv')).iloc[:, [0, 4]]
     gdp_data.columns = ['DATE', 'GDP Y/Y']
 
-    unrate_data = pd.read_csv('data_sets/pl_unrate.csv').iloc[:, [0, 4]]
+    unrate_data = pd.read_csv(data_sets_folder.joinpath('pl_unrate.csv')).iloc[:, [0, 4]]
     unrate_data.columns = ['DATE', 'UNRATE']
 
     datasets = [

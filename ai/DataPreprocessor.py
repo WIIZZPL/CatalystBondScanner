@@ -9,6 +9,24 @@ class DataPreprocessor:
         self.month_unrate_avg = None
         self.scaler = MinMaxScaler().set_output(transform='pandas')
 
+    def transform(self, data: pd.DataFrame) -> pd.DataFrame:
+        fitting_data = data.copy()
+
+        #Differential
+        for column in fitting_data.columns:
+            if column in ['EURIBOR 3M', 'EURIBOR 6M', 'WIBOR 3M', 'WIBOR 6M', 'UNRATE']:
+                fitting_data[column] = fitting_data[column].diff()
+        fitting_data = fitting_data.dropna()
+
+        #Month average
+        fitting_data['MONTH'] = fitting_data.index.month
+        fitting_data['UNRATE'] = fitting_data['UNRATE'] - fitting_data.index.map(lambda d: self.month_unrate_avg.loc[d.month])
+
+        fitting_data = fitting_data.drop(columns=['MONTH'])
+
+        #Standardisation
+        return self.scaler.transform(fitting_data)
+
     def fit_transform(self, data: pd.DataFrame) -> pd.DataFrame:
         self.original_data = data.copy()
         fitting_data = data.copy()

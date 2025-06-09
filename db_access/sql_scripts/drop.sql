@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS issuer_financials;
 
 DROP TABLE IF EXISTS instrument_types;
 DROP TABLE IF EXISTS indexes;
+DROP TABLE IF EXISTS index_rates;
 DROP TABLE IF EXISTS interest_types;
 
 DROP TABLE IF EXISTS bonds;

@@ -37,6 +37,8 @@ class ScannerTab(ttk.Frame):
             {'text': 'Waluta'},
             {'text': 'Cena', 'anchor': 'e'},
             {'text': 'Rynek'},
+            {'text': 'Rentowność bierząca', 'anchor': 'e'},
+            {'text': 'Rentowność YTM', 'anchor': 'e'},
             {'text': 'Oprocentowanie bierzące', 'anchor': 'e'},
             {'text': 'Oprocentowanie bazowe', 'anchor': 'e'},
             {'text': 'Typ oprocentowania'},
