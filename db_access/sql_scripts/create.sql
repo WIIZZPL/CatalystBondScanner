@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS bond_markets (
     bond_id           INTEGER        REFERENCES bonds(id),
     market_id         INTEGER        REFERENCES markets(id),
     price             DECIMAL(4, 4),
+    ytm_yield         DECIMAL,
     PRIMARY KEY (bond_id, market_id)
 );
 
@@ -79,8 +80,8 @@ CREATE VIEW IF NOT EXISTS bonds_view AS
         bonds.currency_code AS currency_code,
         bond_markets.price AS bond_market_price,
         markets.name AS market_name,
-        (bonds.par_value*bonds.c_interest_rate)/(bonds.par_value*bond_markets.price+bonds.accrued_interest) AS current_yield,
-        0 AS YTM_yield,
+        (bonds.par_value*bonds.c_interest_rate)/(bonds.par_value*bond_markets.price+bonds.accrued_interest)*100 AS current_yield,
+        bond_markets.ytm_yield AS ytm_yield,
         bonds.c_interest_rate AS current_interest,
         bonds.base_interest AS base_interest,
         interest_types.name AS interest_type_name,
@@ -99,4 +100,20 @@ CREATE VIEW IF NOT EXISTS bonds_view AS
         ON bonds.interest_type_id = interest_types.id
     LEFT JOIN indexes
         ON bonds.index_id = indexes.id
+;
+
+CREATE VIEW IF NOT EXISTS index_rates_view AS
+    SELECT
+        date,
+        SUM(rate) FILTER (WHERE ix.name = 'EURIBOR 3M') AS "EURIBOR 3M",
+        SUM(rate) FILTER (WHERE ix.name = 'EURIBOR 6M') AS "EURIBOR 6M",
+        SUM(rate) FILTER (WHERE ix.name = 'WIBOR 3M') AS "WIBOR 3M",
+        SUM(rate) FILTER (WHERE ix.name = 'WIBOR 6M') AS "WIBOR 6M",
+        SUM(rate) FILTER (WHERE ix.name = 'CPI Y/Y') AS "CPI Y/Y",
+        SUM(rate) FILTER (WHERE ix.name = 'GDP Y/Y') AS "GDP Y/Y",
+        SUM(rate) FILTER (WHERE ix.name = 'UNRATE') AS "UNRATE"
+    FROM index_rates ixr
+    JOIN indexes ix
+        ON ix.id = ixr.index_name_id
+    GROUP BY date
 ;

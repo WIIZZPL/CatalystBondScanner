@@ -40,9 +40,7 @@ class ScannerTab(ttk.Frame):
             {'text': 'Rentowność bierząca', 'anchor': 'e'},
             {'text': 'Rentowność YTM', 'anchor': 'e'},
             {'text': 'Oprocentowanie bierzące', 'anchor': 'e'},
-            {'text': 'Oprocentowanie bazowe', 'anchor': 'e'},
-            {'text': 'Typ oprocentowania'},
-            {'text': 'Indeks oprocentowania'}
+            {'text': 'Oprocentowanie', 'anchor': 'e'}
         ]
         self.table = ttkbootstrap.tableview.Tableview(master=self.table_frame, coldata=coldata, autofit=True, searchable=True, delimiter=';', bootstyle=ttk.INFO)
         self.table.pack(side='left', fill='both', expand=True)

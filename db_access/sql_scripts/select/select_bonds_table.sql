@@ -7,10 +7,11 @@ SELECT
     currency_code,
     bond_market_price,
     market_name,
-    ROUND(current_yield*100, 4),
-    ROUND(YTM_yield*100, 4),
+    ROUND(current_yield, 4),
+    CASE WHEN ytm_yield IS NULL THEN 0 ELSE ROUND(ytm_yield, 4) END,
     current_interest,
-    base_interest,
-    interest_type_name,
-    CASE WHEN index_name IS NULL THEN 'n/a' ELSE index_name END
+    CASE
+        WHEN index_name IS NOT NULL THEN base_interest || '% + ' || interest_type_name
+        ELSE interest_type_name
+    END AS interest_desc
 FROM bonds_view

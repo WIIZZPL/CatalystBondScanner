@@ -19,7 +19,7 @@ class CatalystBondScanner(ttk.Frame):
 
         self.home_tab = HomeTab(master=self.tabs)
         self.scanner_tab = ScannerTab(master=self.tabs)
-        self.issuer_tab = IssuerTab(master=self.tabs)
+        #self.issuer_tab = IssuerTab(master=self.tabs)
         self.sync_tab = SyncTab(master=self.tabs)
 
         self.tabs.select(1)

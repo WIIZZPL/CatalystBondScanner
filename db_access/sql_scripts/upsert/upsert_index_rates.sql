@@ -1,3 +1,7 @@
+INSERT OR IGNORE INTO indexes(name)
+    VALUES (CASE WHEN '{index_name}' != 'NULL' THEN '{index_name}' ELSE NULL END)
+;
+
 INSERT INTO index_rates(date, index_name_id, is_historical, rate)
     VALUES (
         '{date}',

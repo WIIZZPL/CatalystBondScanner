@@ -3,10 +3,13 @@ import logging
 import sqlite3
 from importlib import resources
 
+from db_access.IndicatorCalculations import ytm_calculations
+
 
 def script_into_statements(script: str) -> [str]:
     statements = script.split(';')
     return list(filter(lambda x: x!='', statements))
+
 
 class DatabaseHandler:
 
@@ -187,10 +190,23 @@ class DatabaseHandler:
         with self.sql_scripts.joinpath('upsert', 'upsert_index_rates.sql').open('r') as script_file:
             script = script_file.read()
             for i in range(len(rates)):
-                for column in rates.columns[:4]:
+                for column in rates.columns:
                     payload = script.format(date=rates.index[i], index_name=column, is_historical=historical, rate=rates.iloc[i][column])
-                    try:
-                        result = cursor.execute(payload)
-                        db_connection.commit()
-                    except sqlite3.Error as e:
-                        logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname}\n{payload.strip()}')
+                    for command in script_into_statements(payload):
+                        try:
+                            result = cursor.execute(command)
+                            db_connection.commit()
+                        except sqlite3.Error as e:
+                            logging.exception(f'SQL ERROR {e.sqlite_errorcode} : {e.sqlite_errorname}\n{command.strip()}')
+
+    def update_complex_indicators(self):
+        logging.info('Updating complex indicators')
+
+        db_connection = sqlite3.connect(self.db_name)
+        cursor = db_connection.cursor()
+
+        ytm_calculations(cursor)
+
+        db_connection.commit()
+
+        logging.info('Complex indicators updated')
