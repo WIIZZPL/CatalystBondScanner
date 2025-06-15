@@ -167,34 +167,34 @@ class SyncTab(ttk.Frame):
 
         db_handler = self.app.get_database_handler()
 
-        # self.scraper.start()
-        #
-        # model = CBSModel(future_len=future_len)
-        # data_preprocessor = None
-        # with open(CBSModel_DP_name, 'rb') as inp:
-        #     data_preprocessor = pickle.load(inp)
-        #
-        # historical_df = get_data()
-        # historical_p = data_preprocessor.transform(historical_df)
-        # model.predict(historical_p.to_numpy()[np.newaxis, ...])
-        # model.load_weights(CBSModel_name)
-        # predictions = model.predict(historical_p.to_numpy()[np.newaxis, ...])
-        #
-        # future_df = pd.DataFrame(predictions[0, :, :])
-        # future_df.columns = historical_df.columns
-        #
-        # last_data_date = historical_df.index[-1]
-        # first_future_date = last_data_date + pd.DateOffset(months=1)
-        # last_future_date = first_future_date + pd.DateOffset(months=future_len - 1)
-        #
-        # future_df.index = pd.date_range(start=first_future_date, end=last_future_date, freq='ME')
-        #
-        # total_data = data_preprocessor.inverse_transform(pd.concat([historical_p, future_df]))
-        #
-        # future_df = total_data.tail(future_len)
-        #
-        # db_handler.upsert_index_rates(historical_df, historical=True)
-        # db_handler.upsert_index_rates(future_df, historical=False)
+        self.scraper.start()
+
+        model = CBSModel(future_len=future_len)
+        data_preprocessor = None
+        with open(CBSModel_DP_name, 'rb') as inp:
+            data_preprocessor = pickle.load(inp)
+
+        historical_df = get_data()
+        historical_p = data_preprocessor.transform(historical_df)
+        model.predict(historical_p.to_numpy()[np.newaxis, ...])
+        model.load_weights(CBSModel_name)
+        predictions = model.predict(historical_p.to_numpy()[np.newaxis, ...])
+
+        future_df = pd.DataFrame(predictions[0, :, :])
+        future_df.columns = historical_df.columns
+
+        last_data_date = historical_df.index[-1]
+        first_future_date = last_data_date + pd.DateOffset(months=1)
+        last_future_date = first_future_date + pd.DateOffset(months=future_len - 1)
+
+        future_df.index = pd.date_range(start=first_future_date, end=last_future_date, freq='ME')
+
+        total_data = data_preprocessor.inverse_transform(pd.concat([historical_p, future_df]))
+
+        future_df = total_data.tail(future_len)
+
+        db_handler.upsert_index_rates(historical_df, historical=True)
+        db_handler.upsert_index_rates(future_df, historical=False)
 
         db_handler.update_complex_indicators()
 
